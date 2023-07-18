@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "638380854532",
+    "project_id": "dhanush-cc049",
+    "storage_bucket": "dhanush-cc049.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638380854532:android:f97e1d8d25174ee1589451",
+        "android_client_info": {
+          "package_name": "com.example.dhanush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638380854532-ti9r0gerd53gjini8edpm0ffkgrud2a4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dhanush",
+            "certificate_hash": "226e0875f55881046496363922ce68aab662dd8f"
+          }
+        },
+        {
+          "client_id": "638380854532-c36g3lf890nla9hv7qun88lcqtbs7f5e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARhOM1yO352JrIXeF1WQVa1zD6zpebuIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638380854532-c36g3lf890nla9hv7qun88lcqtbs7f5e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
