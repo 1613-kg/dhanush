@@ -1,9 +1,16 @@
+import 'package:dhanush/constants.dart';
 import 'package:dhanush/model/partyData.dart';
+import 'package:dhanush/widgets/partyDataUpdateBottomSheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../services/databaseServices.dart';
+
 class partyExpansionTile extends StatelessWidget {
+  String factoryId;
   PartyData partyData;
-  partyExpansionTile({super.key, required this.partyData});
+  partyExpansionTile(
+      {super.key, required this.partyData, required this.factoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +44,74 @@ class partyExpansionTile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ElevatedButton(onPressed: () {}, child: Text("Update")),
-            ElevatedButton(onPressed: () {}, child: Text("Delete"))
+            ElevatedButton(
+                onPressed: () {
+                  _updatePartyData(context, data);
+                },
+                child: Text("Update")),
+            ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Delete"),
+                        content:
+                            const Text("Are you sure you want to delete data?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 185, 70, 62)),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await DatabaseServices(
+                                      FirebaseAuth.instance.currentUser!.uid)
+                                  .deletingPartyData(partyData, factoryId)
+                                  .whenComplete(() {
+                                showSnackbar(
+                                    context, Colors.red, "Data deleted");
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Text(
+                              "Confirm",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text("Delete"))
           ],
         )
       ],
+    );
+  }
+
+  void _updatePartyData(BuildContext context, PartyData data) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () {},
+          child: partyDataUpdateBottomSheet(
+            partyData: data,
+          ),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
     );
   }
 }

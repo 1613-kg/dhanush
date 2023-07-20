@@ -1,8 +1,12 @@
 import 'package:dhanush/model/factoryData.dart';
+import 'package:dhanush/screens/addFactoryData.dart';
 import 'package:dhanush/screens/addItemScreen.dart';
 import 'package:dhanush/widgets/factoryExpansionTile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../services/databaseServices.dart';
+import '../widgets/loading.dart';
 import 'factoryDetailsScreen.dart';
 
 class adminServices extends StatefulWidget {
@@ -14,6 +18,25 @@ class adminServices extends StatefulWidget {
 }
 
 class _adminServicesState extends State<adminServices> {
+  Stream? factoryData;
+
+  getAllFactoryData() async {
+    await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+        .getFactoryData()
+        .then((snapshots) {
+      setState(() {
+        factoryData = snapshots;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllFactoryData();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.sizeOf(context).height;
@@ -31,7 +54,7 @@ class _adminServicesState extends State<adminServices> {
           child: IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => addItemScreen()));
+                    MaterialPageRoute(builder: (context) => addFactoryData()));
               },
               icon: Icon(
                 Icons.add,
@@ -86,37 +109,45 @@ class _adminServicesState extends State<adminServices> {
               SizedBox(
                 height: 20,
               ),
-              factoryExpansionTile(
-                factoryData: FactoryData(
-                    "id", "Bharatpur", "", "", "Garg Oil", 0, 0, [], [], []),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              factoryExpansionTile(
-                factoryData: FactoryData(
-                    "id", "Bharatpur", "", "", "Garg Oil", 0, 0, [], [], []),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              factoryExpansionTile(
-                factoryData: FactoryData(
-                    "id", "Bharatpur", "", "", "Garg Oil", 0, 0, [], [], []),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              factoryExpansionTile(
-                factoryData: FactoryData(
-                    "id", "Bharatpur", "", "", "Garg Oil", 0, 0, [], [], []),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              factoryExpansionTile(
-                factoryData: FactoryData(
-                    "id", "Bharatpur", "", "", "Garg Oil", 0, 0, [], [], []),
+              StreamBuilder(
+                stream: factoryData,
+                builder: ((context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    var dataList = snapshot.data.docs;
+                    // if (snapshot.data['stocks'] != null) {
+                    if (dataList.length != 0) {
+                      return ListView.separated(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemCount: dataList.length,
+                        itemBuilder: (context, index) {
+                          final data = dataList[index].data();
+                          return factoryExpansionTile(
+                            factoryData: FactoryData(
+                              data['factoryId'],
+                              data['location'],
+                              data['description'],
+                              data['image'].cast<String>(),
+                              data['name'],
+                              data['party'].cast<String>(),
+                              data['stocks'].cast<String>(),
+                              data['transport'].cast<String>(),
+                            ),
+                          );
+                        },
+                      );
+                    } else
+                      return Container();
+                    // } else
+                    //   return Container();
+                  } else
+                    return loading();
+                }),
               ),
             ],
           ),

@@ -1,24 +1,23 @@
+import 'package:dhanush/model/stockData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../services/databaseServices.dart';
 
-class partyDataBottomSheet extends StatefulWidget {
-  String factoryId;
-  partyDataBottomSheet({super.key, required this.factoryId});
+class stockDataUpdateBottomSheet extends StatefulWidget {
+  StockData stockData;
+  stockDataUpdateBottomSheet({super.key, required this.stockData});
 
   @override
-  State<partyDataBottomSheet> createState() => _partyDataBottomSheet();
+  State<stockDataUpdateBottomSheet> createState() =>
+      _stockDataUpdateBottomSheetState();
 }
 
-class _partyDataBottomSheet extends State<partyDataBottomSheet> {
-  String _partyName = "";
-  String _partyLocation = "";
-  String _paymentLeft = "";
-  String _paymentDone = "";
-  bool isLoading = false;
+class _stockDataUpdateBottomSheetState
+    extends State<stockDataUpdateBottomSheet> {
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,9 +34,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      initialValue: widget.stockData.type,
                       onChanged: (val) {
                         setState(() {
-                          _partyName = val;
+                          widget.stockData.type = val;
                         });
                       },
                       validator: (value) {
@@ -48,7 +48,7 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter Party Name",
+                          hintText: "Enter Stock type",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
@@ -57,9 +57,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.stockData.stock,
                       onChanged: (val) {
                         setState(() {
-                          _partyLocation = val;
+                          widget.stockData.stock = val;
                         });
                       },
                       validator: (value) {
@@ -70,7 +71,7 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter Party Location",
+                          hintText: "Enter amount",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
@@ -79,14 +80,21 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.stockData.buyingParty,
                       onChanged: (val) {
                         setState(() {
-                          _paymentLeft = val;
+                          widget.stockData.buyingParty = val;
                         });
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return "Field cannot be empty";
+                        else
+                          return null;
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter Payment Left",
+                          hintText: "Enter Purchasing Party",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
@@ -94,27 +102,40 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                     SizedBox(
                       height: 15,
                     ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _paymentDone = val;
-                        });
-                      },
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                          hintText: "Enter payment done",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Lab Check"),
+                        Switch(
+                            value: widget.stockData.labCheck,
+                            onChanged: (val) {
+                              setState(() {
+                                widget.stockData.labCheck = val;
+                              });
+                            }),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                            onTap: () => datepicker(),
+                            child: Text("Change date:")),
+                        Text(widget.stockData.buyingDate.toString()),
+                      ],
                     ),
                     SizedBox(
                       height: 25,
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          _addPartyData();
-                        },
-                        child: Text("Upload"))
+                      onPressed: () {
+                        _updateStockData();
+                      },
+                      child: Text("Update"),
+                    ),
                   ],
                 ),
               )),
@@ -123,17 +144,30 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
     );
   }
 
-  _addPartyData() async {
+  _updateStockData() async {
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-          .savingPartyData(_partyName, _partyLocation, _paymentLeft,
-              _paymentDone, widget.factoryId)
+          .updatingStockData(widget.stockData)
           .whenComplete(() => isLoading = false);
       Navigator.pop(context);
-      showSnackbar(context, Colors.green, "Data Uploaded Successfully");
+      showSnackbar(context, Colors.green, "Data Updated Successfully");
     }
+  }
+
+  void datepicker() {
+    showDatePicker(
+            context: context,
+            initialDate: widget.stockData.buyingDate,
+            firstDate: DateTime(2023),
+            lastDate: DateTime.now())
+        .then((value) {
+      if (value == null) return;
+      setState(() {
+        widget.stockData.buyingDate = value;
+      });
+    });
   }
 }

@@ -1,24 +1,23 @@
-import 'package:dhanush/constants.dart';
-import 'package:dhanush/services/databaseServices.dart';
+import 'package:dhanush/model/transport.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class stockDataBottomSheet extends StatefulWidget {
-  String factoryId;
-  stockDataBottomSheet({super.key, required this.factoryId});
+import '../constants.dart';
+import '../services/databaseServices.dart';
+
+class transportDataUpdateBottomSheet extends StatefulWidget {
+  TransportData transportData;
+  transportDataUpdateBottomSheet({super.key, required this.transportData});
 
   @override
-  State<stockDataBottomSheet> createState() => _stockDataBottomSheetState();
+  State<transportDataUpdateBottomSheet> createState() =>
+      _transportDataUpdateBottomSheetState();
 }
 
-class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
-  String _type = "";
-  String _amount = "";
-  String _purchasedFrom = "";
-  bool _labChecked = false;
-  bool isLoading = false;
-  DateTime _purchasedDate = DateTime.now();
+class _transportDataUpdateBottomSheetState
+    extends State<transportDataUpdateBottomSheet> {
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,9 +34,10 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      initialValue: widget.transportData.deliveredTo,
                       onChanged: (val) {
                         setState(() {
-                          _type = val;
+                          widget.transportData.deliveredTo = val;
                         });
                       },
                       validator: (value) {
@@ -48,7 +48,7 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter Stock type",
+                          hintText: "Enter Party Name",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
@@ -57,9 +57,10 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.transportData.truckNumber,
                       onChanged: (val) {
                         setState(() {
-                          _amount = val;
+                          widget.transportData.truckNumber = val;
                         });
                       },
                       validator: (value) {
@@ -70,7 +71,7 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter amount",
+                          hintText: "Enter vechicle number",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
@@ -79,9 +80,10 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.transportData.driverName,
                       onChanged: (val) {
                         setState(() {
-                          _purchasedFrom = val;
+                          widget.transportData.driverName = val;
                         });
                       },
                       validator: (value) {
@@ -92,28 +94,57 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       },
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
-                          hintText: "Enter Purchasing Party",
+                          hintText: "Enter driver name",
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2))),
                     ),
-
                     SizedBox(
                       height: 15,
                     ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Lab Check"),
-                        Switch(
-                            value: _labChecked,
-                            onChanged: (val) {
-                              setState(() {
-                                _labChecked = val;
-                              });
-                            }),
-                      ],
+                    TextFormField(
+                      initialValue: widget.transportData.driverContact,
+                      onChanged: (val) {
+                        setState(() {
+                          widget.transportData.driverContact = val;
+                        });
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return "Field cannot be empty";
+                        else
+                          return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          hintText: "Enter driver number",
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2))),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      initialValue: widget.transportData.owner,
+                      onChanged: (val) {
+                        setState(() {
+                          widget.transportData.owner = val;
+                        });
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty)
+                          return "Field cannot be empty";
+                        else
+                          return null;
+                      },
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                          hintText: "Enter vechile owner name",
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2))),
                     ),
                     SizedBox(
                       height: 15,
@@ -123,27 +154,19 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
                       children: [
                         InkWell(
                             onTap: () => datepicker(),
-                            child: Text("Change date:")),
-                        Text(_purchasedDate.toString()),
+                            child: Text("Change departure date:")),
+                        Text(widget.transportData.leavingTime.toString()),
                       ],
                     ),
                     SizedBox(
                       height: 25,
                     ),
-                    //(widget.data.id == null)
                     ElevatedButton(
-                        onPressed: () {
-                          _addStockData();
-                        },
-                        child: Text("Upload"))
-                    // : ElevatedButton(
-                    //     onPressed: () {
-                    //       setState(() {
-
-                    //     },
-                    //     child: Text("Update")),
-                    //     }
-                    // )
+                      onPressed: () {
+                        _updateTransportData();
+                      },
+                      child: Text("Update"),
+                    ),
                   ],
                 ),
               )),
@@ -152,30 +175,29 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
     );
   }
 
-  _addStockData() async {
+  _updateTransportData() async {
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-          .savingStockData(_type, _amount, _purchasedFrom, _labChecked,
-              _purchasedDate, widget.factoryId)
+          .updatingTransportData(widget.transportData)
           .whenComplete(() => isLoading = false);
       Navigator.pop(context);
-      showSnackbar(context, Colors.green, "Data Uploaded Successfully");
+      showSnackbar(context, Colors.green, "Data Updated Successfully");
     }
   }
 
   void datepicker() {
     showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: widget.transportData.leavingTime,
             firstDate: DateTime(2023),
             lastDate: DateTime.now())
         .then((value) {
       if (value == null) return;
       setState(() {
-        _purchasedDate = value;
+        widget.transportData.leavingTime = value;
       });
     });
   }

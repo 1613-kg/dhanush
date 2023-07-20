@@ -1,24 +1,23 @@
+import 'package:dhanush/model/partyData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../services/databaseServices.dart';
 
-class partyDataBottomSheet extends StatefulWidget {
-  String factoryId;
-  partyDataBottomSheet({super.key, required this.factoryId});
+class partyDataUpdateBottomSheet extends StatefulWidget {
+  PartyData partyData;
+  partyDataUpdateBottomSheet({super.key, required this.partyData});
 
   @override
-  State<partyDataBottomSheet> createState() => _partyDataBottomSheet();
+  State<partyDataUpdateBottomSheet> createState() =>
+      _partyDataUpdateBottomSheetState();
 }
 
-class _partyDataBottomSheet extends State<partyDataBottomSheet> {
-  String _partyName = "";
-  String _partyLocation = "";
-  String _paymentLeft = "";
-  String _paymentDone = "";
-  bool isLoading = false;
+class _partyDataUpdateBottomSheetState
+    extends State<partyDataUpdateBottomSheet> {
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,9 +34,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      initialValue: widget.partyData.partyName,
                       onChanged: (val) {
                         setState(() {
-                          _partyName = val;
+                          widget.partyData.partyName = val;
                         });
                       },
                       validator: (value) {
@@ -57,9 +57,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.partyData.partyLocation,
                       onChanged: (val) {
                         setState(() {
-                          _partyLocation = val;
+                          widget.partyData.partyLocation = val;
                         });
                       },
                       validator: (value) {
@@ -79,9 +80,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.partyData.paymentLeft,
                       onChanged: (val) {
                         setState(() {
-                          _paymentLeft = val;
+                          widget.partyData.paymentLeft = val;
                         });
                       },
                       textInputAction: TextInputAction.next,
@@ -95,9 +97,10 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                       height: 15,
                     ),
                     TextFormField(
+                      initialValue: widget.partyData.paymentDone,
                       onChanged: (val) {
                         setState(() {
-                          _paymentDone = val;
+                          widget.partyData.paymentDone = val;
                         });
                       },
                       textInputAction: TextInputAction.done,
@@ -112,9 +115,9 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          _addPartyData();
+                          _updatePartyData();
                         },
-                        child: Text("Upload"))
+                        child: Text("Update")),
                   ],
                 ),
               )),
@@ -123,17 +126,16 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
     );
   }
 
-  _addPartyData() async {
+  _updatePartyData() async {
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
       DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-          .savingPartyData(_partyName, _partyLocation, _paymentLeft,
-              _paymentDone, widget.factoryId)
+          .updatingPartyData(widget.partyData)
           .whenComplete(() => isLoading = false);
       Navigator.pop(context);
-      showSnackbar(context, Colors.green, "Data Uploaded Successfully");
+      showSnackbar(context, Colors.green, "Data Updated Successfully");
     }
   }
 }

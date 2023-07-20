@@ -23,8 +23,7 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
             context,
             MaterialPageRoute(
                 builder: (context) => factoryDetailsScreen(
-                      factoryData: FactoryData("id", "Bharatpur", "", "",
-                          "Garg Oil", 0, 0, [], [], []),
+                      factoryData: widget.factoryData,
                     )));
       },
       child: ExpansionTile(
@@ -32,7 +31,7 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
         title: Text(data.name),
         subtitle: Text(data.location),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(data.imageUrl),
+          backgroundImage: NetworkImage(""),
         ),
         children: [
           Column(
@@ -41,11 +40,11 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
                 children: [
                   Column(
                     children: [
-                      Text("Loaded Trucks: ${data.loadedTrucks}"),
+                      Text("Loaded Trucks: 0"),
                       SizedBox(
                         height: 10,
                       ),
-                      Text("Trucks Left: ${data.trucksWillLoad}"),
+                      Text("Trucks Left: 0"),
                     ],
                   ),
                   SizedBox(

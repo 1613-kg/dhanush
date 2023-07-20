@@ -1,9 +1,16 @@
 import 'package:dhanush/model/transport.dart';
+import 'package:dhanush/widgets/transportDataUpdateBottomSheet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+import '../services/databaseServices.dart';
+
 class transportExpanionTile extends StatelessWidget {
+  String factoryId;
   TransportData transportData;
-  transportExpanionTile({super.key, required this.transportData});
+  transportExpanionTile(
+      {super.key, required this.transportData, required this.factoryId});
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +74,75 @@ class transportExpanionTile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ElevatedButton(onPressed: () {}, child: Text("Update")),
-            ElevatedButton(onPressed: () {}, child: Text("Delete"))
+            ElevatedButton(
+                onPressed: () {
+                  _updateTransportData(context, data);
+                },
+                child: Text("Update")),
+            ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Delete"),
+                        content:
+                            const Text("Are you sure you want to delete data?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  color:
+                                      const Color.fromARGB(255, 185, 70, 62)),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await DatabaseServices(
+                                      FirebaseAuth.instance.currentUser!.uid)
+                                  .deletingTransportData(
+                                      transportData, factoryId)
+                                  .whenComplete(() {
+                                showSnackbar(
+                                    context, Colors.red, "Data deleted");
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Text(
+                              "Confirm",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text("Delete"))
           ],
         )
       ],
+    );
+  }
+
+  void _updateTransportData(BuildContext context, TransportData data) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () {},
+          child: transportDataUpdateBottomSheet(
+            transportData: data,
+          ),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
     );
   }
 }

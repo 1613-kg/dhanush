@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/factoryData.dart';
 import 'package:dhanush/model/stockData.dart';
 import 'package:dhanush/services/databaseServices.dart';
@@ -17,14 +18,14 @@ class stockScreen extends StatefulWidget {
 }
 
 class _stockScreenState extends State<stockScreen> {
-  Stream? stockData;
+  Stream? stockDataId;
 
   getAllStockData() async {
     await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-        .getStockData()
+        .getFactorySPT(widget.factoryData.id)
         .then((snapshots) {
       setState(() {
-        stockData = snapshots;
+        stockDataId = snapshots;
       });
     });
   }
@@ -36,9 +37,12 @@ class _stockScreenState extends State<stockScreen> {
     getAllStockData();
   }
 
+  String getId(String res) {
+    return res.substring(res.indexOf("_") + 1);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final data = widget.factoryData;
     return Scaffold(
         appBar: AppBar(
           title: Text("Stock"),
@@ -53,10 +57,10 @@ class _stockScreenState extends State<stockScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("Stock in ${data.name}"),
+                      Text("Stock in ${widget.factoryData.name}"),
                       ElevatedButton(
                           onPressed: () {
-                            _addStoackData(context);
+                            _addStockData(context);
                           },
                           child: Text("Add"))
                     ],
@@ -67,39 +71,55 @@ class _stockScreenState extends State<stockScreen> {
                 height: 20,
               ),
               StreamBuilder(
-                stream: stockData,
+                stream: stockDataId,
                 builder: ((context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
-                    var dataList = snapshot.data.docs;
-                    // if (snapshot.data['stocks'] != null) {
-                    if (dataList.length != 0) {
-                      return ListView.separated(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 10,
-                          );
-                        },
-                        itemCount: dataList.length,
-                        itemBuilder: (context, index) {
-                          int reverseIndex = dataList.length - index - 1;
-                          final data = dataList[reverseIndex].data();
-                          return stockExpansionTile(
-                              stockData: StockData(
-                                  data['stockId'],
-                                  data['amount'],
-                                  data['stockType'],
-                                  data['purchasedDate'].toDate(),
-                                  data['purchasedFrom'],
-                                  data['labCheck'],
-                                  data['addedById']));
-                        },
-                      );
+                    var dataList = snapshot.data['stocks'];
+                    if (snapshot.data['stocks'] != null) {
+                      if (dataList.length != 0) {
+                        return ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              height: 10,
+                            );
+                          },
+                          itemCount: dataList.length,
+                          itemBuilder: (context, index) {
+                            String stockId = getId(dataList[index]);
+
+                            return StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection("stocks")
+                                    .doc(stockId)
+                                    .snapshots(),
+                                builder: ((context, AsyncSnapshot snapshot2) {
+                                  if (snapshot2.hasData) {
+                                    if (snapshot2.data != null) {
+                                      var data2 = snapshot2.data;
+                                      return stockExpansionTile(
+                                          factoryId: widget.factoryData.id,
+                                          stockData: StockData(
+                                              data2['stockId'],
+                                              data2['amount'],
+                                              data2['stockType'],
+                                              data2['purchasedDate'].toDate(),
+                                              data2['purchasedFrom'],
+                                              data2['labCheck'],
+                                              data2['addedById']));
+                                    } else
+                                      return Container();
+                                  } else
+                                    return loading();
+                                }));
+                            // int reverseIndex = dataList.length - index - 1;
+                          },
+                        );
+                      } else
+                        return Container();
                     } else
                       return Container();
-                    // } else
-                    //   return Container();
                   } else
                     return loading();
                 }),
@@ -109,14 +129,16 @@ class _stockScreenState extends State<stockScreen> {
         ));
   }
 
-  void _addStoackData(BuildContext context) {
+  void _addStockData(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) {
         return GestureDetector(
           onTap: () {},
-          child: stockDataBottomSheet(),
+          child: stockDataBottomSheet(
+            factoryId: widget.factoryData.id,
+          ),
           behavior: HitTestBehavior.opaque,
         );
       },
