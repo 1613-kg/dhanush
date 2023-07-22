@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/factoryData.dart';
+import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/model/partyData.dart';
 import 'package:dhanush/model/stockData.dart';
 import 'package:dhanush/model/transport.dart';
@@ -242,27 +243,19 @@ class DatabaseServices {
     return transportCollection.snapshots();
   }
 
-  Future savingItemsData(
-      String description,
-      String unit,
-      String brand,
-      String titleName,
-      String webUrl,
-      int quantity,
-      List<String> imageUrl,
-      double productRating) async {
+  Future savingItemsData(ItemsData itemsData) async {
     DocumentReference itemsDocumentReference = await itemsCollection.add({
-      "description": description,
+      "description": itemsData.description,
       "itemsId": '',
-      "unit": unit,
-      "brand": brand,
-      "titleName": titleName,
-      "webUrl": webUrl,
-      "quantity": quantity,
-      "isFav": false,
-      "isAddedToCart": false,
-      "productRating": productRating,
-      "imageUrl": imageUrl,
+      "unit": itemsData.unit,
+      "brand": itemsData.brand,
+      "titleName": itemsData.titleName,
+      "webUrl": itemsData.webUrl,
+      "quantity": itemsData.quantity,
+      "isFav": itemsData.isFav,
+      "isAddedToCart": itemsData.isAddedToCart,
+      "productRating": itemsData.productRating,
+      "imageUrl": itemsData.imageUrl,
     });
     await itemsDocumentReference.update({
       "itemsId": itemsDocumentReference.id,

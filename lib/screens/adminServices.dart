@@ -53,8 +53,7 @@ class _adminServicesState extends State<adminServices> {
         child: CircleAvatar(
           child: IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => addFactoryData()));
+                showDialogOpt(context);
               },
               icon: Icon(
                 Icons.add,
@@ -154,5 +153,62 @@ class _adminServicesState extends State<adminServices> {
         ),
       ),
     );
+  }
+
+  showDialogOpt(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+              children: [
+                SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => addItemScreen()));
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.add_card_sharp),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("Add Item"),
+                    ],
+                  ),
+                ),
+                SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => addFactoryData()));
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.add_business_rounded),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("Add Factory Date"),
+                    ],
+                  ),
+                ),
+                SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.close),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("Close"),
+                    ],
+                  ),
+                )
+              ],
+            ));
   }
 }

@@ -46,6 +46,8 @@ dependencies:
   dots_indicator: ^2.1.1
   cached_network_image: ^3.2.3
   intl:
+  image_picker:
+  flutter_native_image:
 
 dev_dependencies:
   flutter_test:
