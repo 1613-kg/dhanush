@@ -1,11 +1,16 @@
+import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/screens/loginScreen.dart';
+import 'package:dhanush/screens/searchScreen.dart';
 import 'package:dhanush/services/authServices.dart';
+import 'package:dhanush/services/databaseServices.dart';
 import 'package:dhanush/widgets/itemsGrid.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/loginData.dart';
 import '../widgets/customDrawer.dart';
 import '../widgets/homeImageSlider.dart';
+import '../widgets/loading.dart';
 import '../widgets/priceWidgetBox.dart';
 
 class homeScreen extends StatefulWidget {
@@ -18,6 +23,17 @@ class homeScreen extends StatefulWidget {
 class _homeScreenState extends State<homeScreen> {
   String email = "";
   String userName = "";
+  Stream? itemsData;
+
+  getItemsData() async {
+    await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+        .getItemsData()
+        .then((value) {
+      setState(() {
+        itemsData = value;
+      });
+    });
+  }
 
   getUserData() async {
     await LoginData.getUserEmailFromSF().then((value) {
@@ -37,6 +53,7 @@ class _homeScreenState extends State<homeScreen> {
     // TODO: implement initState
     super.initState();
     getUserData();
+    getItemsData();
   }
 
   @override
@@ -49,6 +66,14 @@ class _homeScreenState extends State<homeScreen> {
       appBar: AppBar(
         title: Text("Dhanush"),
         backgroundColor: colorTheme,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    (MaterialPageRoute(builder: (context) => searchScreen())));
+              },
+              icon: Icon(Icons.search))
+        ],
       ),
       drawer: customDrawer(
         userName: userName,
@@ -97,15 +122,46 @@ class _homeScreenState extends State<homeScreen> {
               SizedBox(
                 height: 20,
               ),
-              GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 12,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: widht / height),
-                  itemBuilder: (context, index) {
-                    return itemsGrid();
-                  })
+              StreamBuilder(
+                stream: itemsData,
+                builder: ((context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    var dataList = snapshot.data.docs;
+                    // if (snapshot.data['stocks'] != null) {
+                    if (dataList.length != 0) {
+                      return GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: dataList.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: widht / height),
+                          itemBuilder: (context, index) {
+                            final data = dataList[index].data();
+                            return itemsGrid(
+                              itemsData: ItemsData(
+                                  data['brand'],
+                                  data['description'],
+                                  data['itemsId'],
+                                  data['quantity'],
+                                  data['titleName'],
+                                  data['unit'],
+                                  data['imageUrl'].cast<String>(),
+                                  data['isFav'].cast<String>(),
+                                  data['isAddedToCart'].cast<String>(),
+                                  data['webUrl'],
+                                  data['productRating']),
+                            );
+                          });
+                    } else
+                      return Container();
+                    // } else
+                    //   return Container();
+                  } else
+                    return loading();
+                }),
+              ),
             ],
           ),
         ),

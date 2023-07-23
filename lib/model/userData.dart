@@ -5,7 +5,9 @@ class UserData {
   bool isAdmin;
   String email;
   String password;
+  List<String> isFav;
+  List<String> isAddedToCart;
 
   UserData(this.id, this.email, this.userName, this.isAdmin, this.password,
-      this.profilePic);
+      this.profilePic, this.isFav, this.isAddedToCart);
 }

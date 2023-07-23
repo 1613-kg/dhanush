@@ -6,8 +6,8 @@ class ItemsData {
   String brand;
   String titleName;
   List<String> imageUrl;
-  bool isFav;
-  bool isAddedToCart;
+  List<String> isFav;
+  List<String> isAddedToCart;
   String webUrl;
   double productRating;
 

@@ -1,26 +1,82 @@
-import 'package:dhanush/widgets/homeImageSlider.dart';
+import 'package:dhanush/model/itemsData.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+import '../services/databaseServices.dart';
+import '../widgets/imageSlider.dart';
+
 class itemDescScreen extends StatefulWidget {
-  const itemDescScreen({super.key});
+  ItemsData itemsData;
+  itemDescScreen({super.key, required this.itemsData});
 
   @override
   State<itemDescScreen> createState() => _itemDescScreenState();
 }
 
 class _itemDescScreenState extends State<itemDescScreen> {
+  int quantity = 0;
+  bool isFav = false;
+  bool isAddedToCart = false;
+
+  getFavAndCart() async {
+    await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+        .isFav(widget.itemsData.id)
+        .then((value) {
+      setState(() {
+        isFav = value!;
+      });
+    });
+
+    await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+        .isAddedToCart(widget.itemsData.id)
+        .then((value) {
+      setState(() {
+        isAddedToCart = value!;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getFavAndCart();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.sizeOf(context).height;
     var widht = MediaQuery.sizeOf(context).width;
+    final data = widget.itemsData;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text("Item Name"),
+        title: Text(data.titleName),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.share)),
           IconButton(
-              onPressed: () {}, icon: Icon(Icons.favorite_border_outlined)),
+            onPressed: () async {
+              await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+                  .toggleFav(widget.itemsData.id)
+                  .then((value) {
+                setState(() {
+                  isFav = !isFav;
+                });
+                (isFav)
+                    ? showSnackbar(
+                        context, Colors.green, "Item added to favourites")
+                    : showSnackbar(
+                        context, Colors.red, "Item removed from favourites");
+              });
+            },
+            icon: (isFav)
+                ? Icon(
+                    Icons.favorite,
+                    color: Colors.pink,
+                  )
+                : Icon(Icons.favorite_border_outlined),
+          ),
           IconButton(onPressed: () {}, icon: Icon(Icons.shopping_bag)),
         ],
       ),
@@ -30,7 +86,9 @@ class _itemDescScreenState extends State<itemDescScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                homeImageSlider(),
+                imageSlider(
+                  images: data.imageUrl,
+                ),
                 SizedBox(
                   height: 20,
                 ),
@@ -41,8 +99,8 @@ class _itemDescScreenState extends State<itemDescScreen> {
                     margin: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        Text("Brand Name"),
-                        Text("price"),
+                        Text(data.brand),
+                        Text("250"),
                       ],
                     ),
                   ),
@@ -70,19 +128,19 @@ class _itemDescScreenState extends State<itemDescScreen> {
                                 child: Text(((1 * 5).toString())),
                               ),
                               CircleAvatar(
-                                child: Text(((1 * 5).toString())),
+                                child: Text(((2 * 5).toString())),
                               ),
                               CircleAvatar(
-                                child: Text(((1 * 5).toString())),
+                                child: Text(((3 * 5).toString())),
                               ),
                               CircleAvatar(
-                                child: Text(((1 * 5).toString())),
+                                child: Text(((4 * 5).toString())),
                               ),
                               CircleAvatar(
-                                child: Text(((1 * 5).toString())),
+                                child: Text(((5 * 5).toString())),
                               ),
                               CircleAvatar(
-                                child: Text(((1 * 5).toString())),
+                                child: Text(((6 * 5).toString())),
                               ),
                             ],
                           ),
@@ -109,7 +167,24 @@ class _itemDescScreenState extends State<itemDescScreen> {
                         SizedBox(
                           width: widht,
                           child: ElevatedButton(
-                              onPressed: () {}, child: Text("Add To Cart")),
+                              onPressed: () async {
+                                await DatabaseServices(
+                                        FirebaseAuth.instance.currentUser!.uid)
+                                    .toggleIsAddedToCart(widget.itemsData.id)
+                                    .then((value) {
+                                  setState(() {
+                                    isAddedToCart = !isAddedToCart;
+                                  });
+                                  (isAddedToCart)
+                                      ? showSnackbar(context, Colors.green,
+                                          "Item added to cart")
+                                      : showSnackbar(context, Colors.red,
+                                          "Item removed from cart");
+                                });
+                              },
+                              child: Text((isAddedToCart)
+                                  ? "Remove from cart"
+                                  : "Add To Cart")),
                         ),
                         SizedBox(
                           height: 5,
@@ -143,7 +218,7 @@ class _itemDescScreenState extends State<itemDescScreen> {
                     child: Column(
                       children: [
                         Text("About Product"),
-                        Text("desc"),
+                        Text(data.description),
                       ],
                     ),
                   ),

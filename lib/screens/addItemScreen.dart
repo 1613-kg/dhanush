@@ -93,25 +93,6 @@ class _addItemScreenState extends State<addItemScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Price",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          textField(
-                              hint: "180",
-                              inputType: TextInputType.number,
-                              controller: _priceController,
-                              maxLine: 1),
-                        ],
-                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -336,8 +317,8 @@ class _addItemScreenState extends State<addItemScreen> {
                   _itemNameController.text,
                   _priceController.text,
                   _imageUrl,
-                  false,
-                  false,
+                  [],
+                  [],
                   "",
                   0.0))
               .whenComplete(() => isLoading = false);

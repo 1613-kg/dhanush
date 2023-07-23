@@ -36,6 +36,8 @@ class DatabaseServices {
       "uid": uid,
       "profilePic": profilePic,
       "password": password,
+      "isFav": [],
+      "isAddedToCart": []
     });
   }
 
@@ -260,6 +262,98 @@ class DatabaseServices {
     await itemsDocumentReference.update({
       "itemsId": itemsDocumentReference.id,
     });
+  }
+
+  Future updatingItemsData(ItemsData itemsData) async {
+    await transportCollection.doc(itemsData.id).update({
+      "description": itemsData.description,
+      "itemsId": '',
+      "unit": itemsData.unit,
+      "brand": itemsData.brand,
+      "titleName": itemsData.titleName,
+      "webUrl": itemsData.webUrl,
+      "quantity": itemsData.quantity,
+      "isFav": itemsData.isFav,
+      "isAddedToCart": itemsData.isAddedToCart,
+      "productRating": itemsData.productRating,
+      "imageUrl": itemsData.imageUrl,
+    });
+  }
+
+  Future<bool?> isFav(String itemsId) async {
+    DocumentReference userDocumentRefernce = userCollection.doc(uid);
+    DocumentSnapshot documentSnapshot = await userDocumentRefernce.get();
+
+    List<dynamic> isFav = await documentSnapshot['isFav'];
+    if (isFav.contains(itemsId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future toggleFav(String itemsId) async {
+    // doc reference
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    DocumentReference itemsDocumentReference = itemsCollection.doc(itemsId);
+
+    DocumentSnapshot documentSnapshot = await itemsDocumentReference.get();
+    List<dynamic> isFav = await documentSnapshot['isFav'];
+
+    // if user has our groups -> then remove then or also in other part re join
+    if (isFav.contains("$uid")) {
+      await itemsDocumentReference.update({
+        "isFav": FieldValue.arrayRemove([uid])
+      });
+      await userDocumentReference.update({
+        "isFav": FieldValue.arrayRemove([itemsId])
+      });
+    } else {
+      await userDocumentReference.update({
+        "isFav": FieldValue.arrayUnion([itemsId])
+      });
+      await itemsDocumentReference.update({
+        "isFav": FieldValue.arrayUnion([uid])
+      });
+    }
+  }
+
+  Future<bool?> isAddedToCart(String itemsId) async {
+    DocumentReference userDocumentRefernce = userCollection.doc(uid);
+    DocumentSnapshot documentSnapshot = await userDocumentRefernce.get();
+
+    List<dynamic> isAddedToCart = await documentSnapshot['isAddedToCart'];
+    if (isAddedToCart.contains(itemsId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future toggleIsAddedToCart(String itemsId) async {
+    // doc reference
+    DocumentReference userDocumentReference = userCollection.doc(uid);
+    DocumentReference itemsDocumentReference = itemsCollection.doc(itemsId);
+
+    DocumentSnapshot documentSnapshot = await itemsDocumentReference.get();
+    List<dynamic> isAddedToCart = await documentSnapshot['isAddedToCart'];
+
+    // if user has our groups -> then remove then or also in other part re join
+    if (isAddedToCart.contains("$uid")) {
+      await itemsDocumentReference.update({
+        "isAddedToCart": FieldValue.arrayRemove([uid])
+      });
+      await userDocumentReference.update({
+        "isAddedToCart": FieldValue.arrayRemove([itemsId])
+      });
+    } else {
+      await userDocumentReference.update({
+        "isAddedToCart": FieldValue.arrayUnion([itemsId])
+      });
+      await itemsDocumentReference.update({
+        "isAddedToCart": FieldValue.arrayUnion([uid])
+      });
+    }
   }
 
   getItemsData() async {
