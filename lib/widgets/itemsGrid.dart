@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 
 class itemsGrid extends StatefulWidget {
   ItemsData itemsData;
-  itemsGrid({super.key, required this.itemsData});
+  double price;
+  itemsGrid({super.key, required this.itemsData, required this.price});
 
   @override
   State<itemsGrid> createState() => _itemsGridState();
@@ -42,6 +43,7 @@ class _itemsGridState extends State<itemsGrid> {
             MaterialPageRoute(
                 builder: (context) => itemDescScreen(
                       itemsData: widget.itemsData,
+                      price: widget.price,
                     )));
       },
       child: Card(

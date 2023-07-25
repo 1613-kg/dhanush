@@ -1,4 +1,8 @@
 import 'package:dhanush/model/itemsData.dart';
+import 'package:dhanush/screens/buyNowScreen.dart';
+import 'package:dhanush/screens/cartScreen.dart';
+import 'package:dhanush/screens/favouritesScreen.dart';
+import 'package:dhanush/screens/homeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +12,15 @@ import '../widgets/imageSlider.dart';
 
 class itemDescScreen extends StatefulWidget {
   ItemsData itemsData;
-  itemDescScreen({super.key, required this.itemsData});
+  double price;
+  itemDescScreen({super.key, required this.itemsData, required this.price});
 
   @override
   State<itemDescScreen> createState() => _itemDescScreenState();
 }
 
 class _itemDescScreenState extends State<itemDescScreen> {
-  int quantity = 0;
+  int quantity = 1;
   bool isFav = false;
   bool isAddedToCart = false;
 
@@ -51,33 +56,40 @@ class _itemDescScreenState extends State<itemDescScreen> {
     final data = widget.itemsData;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => homeScreen()));
+            },
+            icon: Icon(Icons.arrow_back)),
         backgroundColor: Colors.redAccent,
         title: Text(data.titleName),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.share)),
           IconButton(
-            onPressed: () async {
-              await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-                  .toggleFav(widget.itemsData.id)
-                  .then((value) {
-                setState(() {
-                  isFav = !isFav;
-                });
-                (isFav)
-                    ? showSnackbar(
-                        context, Colors.green, "Item added to favourites")
-                    : showSnackbar(
-                        context, Colors.red, "Item removed from favourites");
-              });
-            },
-            icon: (isFav)
-                ? Icon(
-                    Icons.favorite,
-                    color: Colors.pink,
-                  )
-                : Icon(Icons.favorite_border_outlined),
-          ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.shopping_bag)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => favouritesScreen(
+                              price: widget.price,
+                            )));
+              },
+              icon: Icon(
+                Icons.favorite,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => cartScreen(
+                              itemsData: widget.itemsData,
+                              quantity: quantity,
+                              price: widget.price,
+                            )));
+              },
+              icon: Icon(Icons.shopping_bag)),
         ],
       ),
       body: SingleChildScrollView(
@@ -159,7 +171,7 @@ class _itemDescScreenState extends State<itemDescScreen> {
                 ),
                 Container(
                   width: widht,
-                  height: height / 4,
+                  height: height / 5,
                   child: Card(
                     margin: EdgeInsets.all(10),
                     child: Column(
@@ -192,16 +204,18 @@ class _itemDescScreenState extends State<itemDescScreen> {
                         SizedBox(
                           width: widht,
                           child: ElevatedButton(
-                              onPressed: () {}, child: Text("Buy Now")),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        SizedBox(
-                          width: widht,
-                          child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text("Shop From Indiamart")),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => buyNowScreen(
+                                              itemsData: widget.itemsData,
+                                              totalAmount:
+                                                  widget.price * quantity,
+                                              quantity: quantity,
+                                            )));
+                              },
+                              child: Text("Buy Now")),
                         ),
                       ],
                     ),

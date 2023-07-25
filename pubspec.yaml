@@ -48,6 +48,7 @@ dependencies:
   intl:
   image_picker:
   flutter_native_image:
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

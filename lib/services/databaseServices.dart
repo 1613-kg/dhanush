@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/factoryData.dart';
 import 'package:dhanush/model/itemsData.dart';
+import 'package:dhanush/model/orderData.dart';
 import 'package:dhanush/model/partyData.dart';
 import 'package:dhanush/model/stockData.dart';
 import 'package:dhanush/model/transport.dart';
@@ -27,6 +28,9 @@ class DatabaseServices {
   final CollectionReference factoryCollection =
       FirebaseFirestore.instance.collection("factory");
 
+  final CollectionReference orderCollection =
+      FirebaseFirestore.instance.collection("order");
+
   Future savingUserData(String userName, String email, bool isAdmin,
       String profilePic, String password) async {
     return await userCollection.doc(uid).set({
@@ -45,6 +49,10 @@ class DatabaseServices {
     QuerySnapshot snapshot =
         await userCollection.where("email", isEqualTo: email).get();
     return snapshot;
+  }
+
+  getUserData() async {
+    return userCollection.doc(uid).snapshots();
   }
 
   Future savingStockData(String stockType, String amount, String purchasedFrom,
@@ -338,7 +346,6 @@ class DatabaseServices {
     DocumentSnapshot documentSnapshot = await itemsDocumentReference.get();
     List<dynamic> isAddedToCart = await documentSnapshot['isAddedToCart'];
 
-    // if user has our groups -> then remove then or also in other part re join
     if (isAddedToCart.contains("$uid")) {
       await itemsDocumentReference.update({
         "isAddedToCart": FieldValue.arrayRemove([uid])
@@ -358,5 +365,21 @@ class DatabaseServices {
 
   getItemsData() async {
     return itemsCollection.snapshots();
+  }
+
+  Future savingOrderData(OrderData orderData) async {
+    DocumentReference orderDocumentReference = await orderCollection.add({
+      "orderId": '',
+      "address": orderData.address,
+      "buyerId": orderData.buyerId,
+      "itemId": orderData.itemId,
+      "price": orderData.price,
+      "quantity": orderData.quantity,
+      "paymentType": orderData.paymentType,
+      "date": orderData.date
+    });
+    await orderDocumentReference.update({
+      "orderId": orderDocumentReference.id,
+    });
   }
 }

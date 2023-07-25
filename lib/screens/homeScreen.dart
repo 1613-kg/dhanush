@@ -140,6 +140,7 @@ class _homeScreenState extends State<homeScreen> {
                           itemBuilder: (context, index) {
                             final data = dataList[index].data();
                             return itemsGrid(
+                              price: 250,
                               itemsData: ItemsData(
                                   data['brand'],
                                   data['description'],
