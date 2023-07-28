@@ -38,17 +38,22 @@ dependencies:
   animated_splash_screen:
   loading_indicator:
   shared_preferences:
-  firebase_auth: ^4.6.3
+  firebase_auth: 
   firebase_core:
   cloud_firestore:
   firebase_storage:
-  carousel_slider: ^4.2.1
-  dots_indicator: ^2.1.1
-  cached_network_image: ^3.2.3
+  carousel_slider: 
+  dots_indicator: 
+  cached_network_image: 
   intl:
   image_picker:
   flutter_native_image:
-  auto_size_text: ^3.0.0
+  auto_size_text: 
+  razorpay_flutter: 
+  http:
+  webview_flutter:
+  social_media_flutter: ^0.0.2
+  flutter_webview_plugin:
 
 dev_dependencies:
   flutter_test:

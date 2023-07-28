@@ -73,27 +73,22 @@ class _loginScreenState extends State<loginScreen> {
           "Login",
           style: TextStyle(color: Colors.white),
         ),
+        centerTitle: true,
       ),
       body: (_isLoading)
           ? loading()
           : SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.fromLTRB(15, 50, 15, 30),
+                padding: EdgeInsets.all(5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                    ClipOval(
+                      //borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
                         'assets/images/logoDhanush.jpg',
                       ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      "Welcome to Dhanush",
-                      style: textTheme.titleLarge,
                     ),
                     SizedBox(
                       height: 20,
@@ -218,17 +213,27 @@ class _loginScreenState extends State<loginScreen> {
                     SizedBox(
                       height: 60,
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          login();
-                        },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(fontSize: 25),
-                        )),
                     SizedBox(
-                      height: 80,
+                      width: double.infinity,
+                      height: 40,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            login();
+                          },
+                          child: Text(
+                            "Login",
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor)),
                     ),
+                    (dropDownValue == 'User')
+                        ? SizedBox(
+                            height: 140,
+                          )
+                        : SizedBox(
+                            height: 80,
+                          ),
                     Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
@@ -236,8 +241,8 @@ class _loginScreenState extends State<loginScreen> {
                         children: <TextSpan>[
                           TextSpan(
                               text: "Create",
-                              style: const TextStyle(
-                                color: Colors.orange,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {

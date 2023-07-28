@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/itemsData.dart';
+import 'package:dhanush/model/userData.dart';
 import 'package:dhanush/screens/loginScreen.dart';
 import 'package:dhanush/screens/searchScreen.dart';
 import 'package:dhanush/services/authServices.dart';
@@ -21,8 +23,8 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<homeScreen> {
-  String email = "";
-  String userName = "";
+  UserData userData = UserData('id', 'email', 'userName', false, 'password',
+      'profilePic', ['isFav'], ['isAddedToCart']);
   Stream? itemsData;
 
   getItemsData() async {
@@ -36,15 +38,18 @@ class _homeScreenState extends State<homeScreen> {
   }
 
   getUserData() async {
-    await LoginData.getUserEmailFromSF().then((value) {
-      setState(() {
-        email = value!;
-      });
-    });
-    await LoginData.getUserNameFromSF().then((value) {
-      setState(() {
-        userName = value!;
-      });
+    QuerySnapshot snapshot =
+        await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+            .gettingUserIdData();
+    setState(() {
+      userData.id = snapshot.docs[0]['uid'];
+      userData.email = snapshot.docs[0]['email'];
+      userData.userName = snapshot.docs[0]['userName'];
+      userData.isAdmin = snapshot.docs[0]['isAdmin'];
+      userData.isAddedToCart = snapshot.docs[0]['isAddedToCart'].cast<String>();
+      userData.isFav = snapshot.docs[0]['isFav'].cast<String>();
+      userData.profilePic = snapshot.docs[0]['profilePic'];
+      userData.password = snapshot.docs[0]['password'];
     });
   }
 
@@ -74,9 +79,10 @@ class _homeScreenState extends State<homeScreen> {
               },
               icon: Icon(Icons.search))
         ],
+        centerTitle: true,
       ),
       drawer: customDrawer(
-        userName: userName,
+        userData: userData,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -116,7 +122,7 @@ class _homeScreenState extends State<homeScreen> {
               ),
               SizedBox(height: 25),
               Text(
-                "Items available",
+                "Items Available",
                 style: textTheme.titleLarge,
               ),
               SizedBox(

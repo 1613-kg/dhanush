@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class priceWidgetBox extends StatefulWidget {
+class priceWidgetBox extends StatelessWidget {
   String text;
   String price;
   IconData iconData;
@@ -11,23 +11,30 @@ class priceWidgetBox extends StatefulWidget {
       required this.iconData});
 
   @override
-  State<priceWidgetBox> createState() => _priceWidgetBoxState();
-}
-
-class _priceWidgetBoxState extends State<priceWidgetBox> {
-  @override
   Widget build(BuildContext context) {
     var height = MediaQuery.sizeOf(context).height;
     var widht = MediaQuery.sizeOf(context).width;
     var textTheme = Theme.of(context).primaryTextTheme;
     var colorTheme = Theme.of(context).primaryColor;
-    return ListTile(
-      leading: Icon(widget.iconData),
-      title: Text(widget.text),
-      subtitle: Text(widget.price),
-      trailing: IconButton(
-        icon: Icon(Icons.info),
-        onPressed: () {},
+    return Container(
+      decoration: BoxDecoration(
+        color: colorTheme,
+        shape: BoxShape.rectangle,
+        border: Border.all(color: Colors.black54, width: 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        onTap: () {
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => sectionScreen(
+          //               batchesData: batchesData,
+          //             )));
+        },
+        title: Text(text),
+        leading: Icon(iconData),
+        subtitle: Text(price),
       ),
     );
   }

@@ -39,7 +39,13 @@ class _searchScreenState extends State<searchScreen> {
   String searchText = '';
   @override
   Widget build(BuildContext context) {
+    var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Search"),
+        backgroundColor: colorTheme,
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
@@ -55,12 +61,24 @@ class _searchScreenState extends State<searchScreen> {
                   },
                   controller: _searchController,
                   decoration: InputDecoration(
-                      labelText: "Search",
-                      hintText: "Search",
+                      hintText: "Search Item",
                       prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(25.0)))),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: colorTheme)),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(color: colorTheme),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(color: colorTheme),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide(color: colorTheme),
+                      ),
+                      border: InputBorder.none),
                 ),
               ),
               StreamBuilder(

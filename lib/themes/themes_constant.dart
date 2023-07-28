@@ -3,30 +3,30 @@ import 'package:flutter/material.dart';
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   backgroundColor: Colors.white,
-  primaryColor: Colors.red,
+  primaryColor: Color.fromARGB(234, 235, 105, 45),
   primaryTextTheme: TextTheme(
       titleLarge: TextStyle(
-          fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
       bodyLarge: TextStyle(
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
           color: Colors.black87.withOpacity(0.8)),
       bodySmall: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w600, color: Colors.black54)),
+          fontSize: 10, fontWeight: FontWeight.w600, color: Colors.black54)),
   useMaterial3: true,
 );
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  backgroundColor: Colors.black,
-  primaryColor: Colors.red,
+  backgroundColor: Colors.black54,
+  primaryColor: Color.fromARGB(234, 235, 105, 45),
   primaryTextTheme: TextTheme(
       titleLarge: TextStyle(
-          fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+          fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
       bodyLarge: TextStyle(
-          fontSize: 20,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
           color: Colors.white70.withOpacity(0.8)),
       bodySmall: TextStyle(
-          fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white60)),
+          fontSize: 10, fontWeight: FontWeight.w600, color: Colors.white60)),
   useMaterial3: true,
 );

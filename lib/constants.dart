@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
 const textInputDecoration = InputDecoration(
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Color.fromARGB(255, 216, 121, 48))),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
+    ),
     errorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red, width: 2),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red, width: 2),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
     ),
-    focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.deepOrangeAccent, width: 2)),
-    enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.deepOrangeAccent, width: 2)));
+    border: InputBorder.none);
 
 void showSnackbar(context, color, message) {
   ScaffoldMessenger.of(context).showSnackBar(

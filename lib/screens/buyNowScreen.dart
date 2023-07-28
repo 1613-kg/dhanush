@@ -1,9 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dhanush/constants.dart';
 import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/model/orderData.dart';
 import 'package:dhanush/screens/success.dart';
+import 'package:dhanush/services/payment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../services/databaseServices.dart';
 
@@ -32,6 +36,79 @@ class _buyNowScreenState extends State<buyNowScreen> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   int _value = 0;
+  String email = "";
+  var _razorpay = Razorpay();
+  String order_Id = "";
+
+  void _handlerPaymentSuccess(PaymentSuccessResponse response) {
+    // _addOrderData();
+    print("Pament success😂😂😂");
+    //Toast.show("Pament success", context);
+  }
+
+  void _handlerErrorFailure(PaymentFailureResponse response) {
+    //showSnackbar(context, Colors.red, "Payment failed");
+    //print("Error😂😂😂");
+    //Toast.show("Pament error", context);
+  }
+
+  void _handlerExternalWallet(ExternalWalletResponse response) {}
+
+  getUser() async {
+    QuerySnapshot snapshot =
+        await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+            .gettingUserIdData();
+
+    setState(() {
+      email = snapshot.docs[0]['email'];
+    });
+  }
+
+  getOrderId(double amount) async {
+    await generateOrderId(amount).then((value) {
+      setState(() {
+        order_Id = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlerPaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlerErrorFailure);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handlerExternalWallet);
+    //print("Working😂😂😂😂");
+    getUser();
+    getOrderId(widget.totalAmount);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void openCheckout() {
+    //print("Working😂😂😂😂");
+    Map<String, dynamic> options = {
+      "key": "rzp_test_TTMLTDLLI43xpE",
+      "amount": widget.totalAmount * 100,
+      "order_id": order_Id,
+      "name": "Dhanush App",
+      "description": "Payment for the ${widget.itemsData.titleName}",
+      "prefill": {"email": email},
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      //print("${e.toString()}😂😂");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +139,11 @@ class _buyNowScreenState extends State<buyNowScreen> {
                 child: Text("Continue"),
               )
             : ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    openCheckout();
+                  }
+                },
                 child: Text('Proceed To Pay'),
               ),
       ),
@@ -407,11 +488,17 @@ class _buyNowScreenState extends State<buyNowScreen> {
           .savingOrderData(OrderData(
               orderId: '',
               address: _houseNumber.text.trim() +
+                  ' ' +
                   floorNumber +
+                  ' ' +
                   _locality.text.trim() +
+                  ' ' +
                   _landmark.text.trim() +
+                  ' ' +
                   _city.text.trim() +
+                  ' ' +
                   _state.text.trim() +
+                  ' ' +
                   _pincode.text.trim(),
               itemId: widget.itemsData.id,
               buyerId: FirebaseAuth.instance.currentUser!.uid,

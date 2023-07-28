@@ -1,172 +1,265 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dhanush/model/userData.dart';
+import 'package:dhanush/screens/aboutUsWebView.dart';
 import 'package:dhanush/screens/adminServices.dart';
+import 'package:dhanush/screens/allOrders.dart';
+import 'package:dhanush/screens/facebook.dart';
 import 'package:dhanush/screens/feedbaks.dart';
 import 'package:dhanush/screens/homeScreen.dart';
+import 'package:dhanush/screens/instagram.dart';
 import 'package:dhanush/screens/profile.dart';
-import 'package:dhanush/screens/settings.dart';
+
+import 'package:dhanush/screens/userOrders.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_flutter/widgets/icons.dart';
 
 import '../screens/loginScreen.dart';
 import '../services/authServices.dart';
 
-class customDrawer extends StatefulWidget {
-  String userName;
-  customDrawer({super.key, required this.userName});
+class customDrawer extends StatelessWidget {
+  UserData userData;
+  customDrawer({required this.userData});
 
-  @override
-  State<customDrawer> createState() => _customDrawerState();
-}
-
-class _customDrawerState extends State<customDrawer> {
   AuthService _authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).primaryTextTheme;
     var colorTheme = Theme.of(context).primaryColor;
     return Drawer(
       elevation: 1,
-      child: ListView(
-        children: [
-          Icon(
-            Icons.account_circle,
-            size: 150,
-            color: Colors.grey,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            widget.userName,
-            textAlign: TextAlign.center,
-            style: textTheme.bodyLarge,
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Divider(
-            height: 2,
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => homeScreen()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: Icon(Icons.group),
-            title: Text("Home", style: textTheme.bodyLarge),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => profile()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.person),
-            title: Text(
-              "Profile",
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          children: [
+            CachedNetworkImage(
+                width: double.infinity,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => CircleAvatar(
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
+                      ),
+                      backgroundColor: colorTheme,
+                      radius: 80,
+                    ),
+                //radius: 150,
+                imageUrl: userData.profilePic),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              userData.userName,
+              textAlign: TextAlign.center,
               style: textTheme.bodyLarge,
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => feedbacks()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.feedback),
-            title: Text(
-              "Feedbacks",
-              style: textTheme.bodyLarge,
+            SizedBox(
+              height: 30,
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => adminServices(
-                            userName: widget.userName,
-                          )));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.privacy_tip),
-            title: Text(
-              "Admin Services",
-              style: textTheme.bodyLarge,
+            Divider(
+              height: 2,
             ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => settings()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.settings),
-            title: Text(
-              "Settings",
-              style: textTheme.bodyLarge,
+            ListTile(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => homeScreen()),
+                    (route) => false);
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: Icon(Icons.group),
+              title: Text("Home", style: textTheme.bodyLarge),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text("Logout"),
-                      content: Text("Are you sure you want to logout?"),
-                      actions: [
-                        IconButton(
+            ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => profile(
+                              userData: userData,
+                            )));
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.person),
+              title: Text(
+                "Profile",
+                style: textTheme.bodyLarge,
+              ),
+            ),
+            (!userData.isAdmin)
+                ? ListTile(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => userOrder()));
+                    },
+                    selectedColor: Theme.of(context).primaryColor,
+                    selected: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(Icons.gif_box),
+                    title: Text(
+                      "Order History",
+                      style: textTheme.bodyLarge,
+                    ),
+                  )
+                : ListTile(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => allOrders()));
+                    },
+                    selectedColor: Theme.of(context).primaryColor,
+                    selected: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(Icons.gif_box),
+                    title: Text(
+                      "Order Details",
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
+            // ListTile(
+            //   onTap: () {
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => feedbacks()));
+            //   },
+            //   selectedColor: Theme.of(context).primaryColor,
+            //   selected: true,
+            //   contentPadding:
+            //       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            //   leading: const Icon(Icons.feedback),
+            //   title: Text(
+            //     "Feedbacks",
+            //     style: textTheme.bodyLarge,
+            //   ),
+            // ),
+            (userData.isAdmin)
+                ? ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => adminServices(
+                                    userName: userData.userName,
+                                  )));
+                    },
+                    selectedColor: Theme.of(context).primaryColor,
+                    selected: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(Icons.privacy_tip),
+                    title: Text(
+                      "Admin Services",
+                      style: textTheme.bodyLarge,
+                    ),
+                  )
+                : Container(),
+            ListTile(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => aboutUsWebView()));
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.info),
+              title: Text(
+                "About us",
+                style: textTheme.bodyLarge,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Logout"),
+                        content: Text("Are you sure you want to logout?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await _authService.signOut();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => loginScreen()),
+                                  (route) => false);
+                            },
+                            child: Text(
+                              "Confirm",
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.exit_to_app),
+              title: Text(
+                "Logout",
+                style: textTheme.bodyLarge,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Follow Us: ",
+                    style: textTheme.bodyLarge,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
                           onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await _authService.signOut();
-                            Navigator.of(context).pushAndRemoveUntil(
+                            Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                    builder: (context) => loginScreen()),
-                                (route) => false);
+                                    builder: (context) => facebok()));
                           },
-                          icon: const Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.exit_to_app),
-            title: Text(
-              "Logout",
-              style: textTheme.bodyLarge,
-            ),
-          ),
-        ],
+                          icon: Icon(SocialIconsFlutter.facebook)),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => instagram()));
+                          },
+                          icon: Icon(SocialIconsFlutter.instagram)),
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

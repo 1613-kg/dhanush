@@ -51,6 +51,12 @@ class DatabaseServices {
     return snapshot;
   }
 
+  Future gettingUserIdData() async {
+    QuerySnapshot snapshot =
+        await userCollection.where("uid", isEqualTo: uid).get();
+    return snapshot;
+  }
+
   getUserData() async {
     return userCollection.doc(uid).snapshots();
   }
@@ -367,6 +373,12 @@ class DatabaseServices {
     return itemsCollection.snapshots();
   }
 
+  Future gettingItemsData(String itemId) async {
+    QuerySnapshot snapshot =
+        await itemsCollection.where("itemsId", isEqualTo: itemId).get();
+    return snapshot;
+  }
+
   Future savingOrderData(OrderData orderData) async {
     DocumentReference orderDocumentReference = await orderCollection.add({
       "orderId": '',
@@ -381,5 +393,13 @@ class DatabaseServices {
     await orderDocumentReference.update({
       "orderId": orderDocumentReference.id,
     });
+  }
+
+  getAllOrders() async {
+    return orderCollection.snapshots();
+  }
+
+  getOrdersData() async {
+    return orderCollection.where('buyerId', isEqualTo: uid).snapshots();
   }
 }
