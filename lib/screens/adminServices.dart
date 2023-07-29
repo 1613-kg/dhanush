@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dhanush/model/factoryData.dart';
+import 'package:dhanush/model/userData.dart';
 import 'package:dhanush/screens/addFactoryData.dart';
 import 'package:dhanush/screens/addItemScreen.dart';
 import 'package:dhanush/widgets/factoryExpansionTile.dart';
@@ -10,8 +12,8 @@ import '../widgets/loading.dart';
 import 'factoryDetailsScreen.dart';
 
 class adminServices extends StatefulWidget {
-  String userName;
-  adminServices({super.key, required this.userName});
+  UserData userData;
+  adminServices({super.key, required this.userData});
 
   @override
   State<adminServices> createState() => _adminServicesState();
@@ -45,19 +47,32 @@ class _adminServicesState extends State<adminServices> {
     var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Admin"),
-        backgroundColor: colorTheme,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Admin Services",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: colorTheme,
         onPressed: () {},
         child: CircleAvatar(
           child: IconButton(
-              onPressed: () {
-                showDialogOpt(context);
-              },
-              icon: Icon(
-                Icons.add,
-              )),
+            onPressed: () {
+              showDialogOpt(context);
+            },
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: colorTheme,
           radius: 25,
         ),
       ),
@@ -66,44 +81,33 @@ class _adminServicesState extends State<adminServices> {
           padding: EdgeInsets.all(20),
           child: Column(
             children: [
-              Icon(
-                Icons.account_circle,
-                size: 250,
-                color: Colors.grey,
-              ),
+              CachedNetworkImage(
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                        child: Icon(
+                          Icons.person,
+                          size: 80,
+                          color: Colors.white,
+                        ),
+                        backgroundColor: colorTheme,
+                        radius: 100,
+                      ),
+                  //radius: 150,
+                  imageUrl: widget.userData.profilePic),
               SizedBox(
-                height: 10,
+                height: 20,
               ),
-              Text(widget.userName),
+              Text(
+                widget.userData.userName.toUpperCase(),
+                style: textTheme.titleLarge,
+              ),
               SizedBox(
                 height: 10,
               ),
               Divider(
                 thickness: 2,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Admin Password",
-                      style: textTheme.bodySmall,
-                    ),
-                    SizedBox(
-                      width: 120,
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Change",
-                          style: TextStyle(color: Colors.purpleAccent),
-                        )),
-                  ],
-                ),
               ),
               SizedBox(
                 height: 20,

@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/model/userData.dart';
-import 'package:dhanush/screens/loginScreen.dart';
+
 import 'package:dhanush/screens/searchScreen.dart';
-import 'package:dhanush/services/authServices.dart';
+
 import 'package:dhanush/services/databaseServices.dart';
 import 'package:dhanush/widgets/itemsGrid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../services/loginData.dart';
 import '../widgets/customDrawer.dart';
 import '../widgets/homeImageSlider.dart';
+
 import '../widgets/loading.dart';
 import '../widgets/priceWidgetBox.dart';
 
@@ -69,7 +69,11 @@ class _homeScreenState extends State<homeScreen> {
     var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dhanush"),
+        title: Text(
+          "Dhanush",
+          style: TextStyle(
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: colorTheme,
         actions: [
           IconButton(
@@ -77,9 +81,13 @@ class _homeScreenState extends State<homeScreen> {
                 Navigator.push(context,
                     (MaterialPageRoute(builder: (context) => searchScreen())));
               },
-              icon: Icon(Icons.search))
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ))
         ],
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       drawer: customDrawer(
         userData: userData,

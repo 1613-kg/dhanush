@@ -49,8 +49,8 @@ class _splashScreen1State extends State<splashScreen1> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Dhanush Oil",
-                    style: TextStyle(color: Colors.white, fontSize: 40),
+                    "Dhanush",
+                    style: TextStyle(color: Colors.white, fontSize: 37),
                   ),
                   SizedBox(
                     height: 5,
@@ -72,7 +72,7 @@ class _splashScreen1State extends State<splashScreen1> {
                       ),
                       Expanded(
                         child: Divider(
-                          thickness: 2,
+                          thickness: 1,
                           indent: 10,
                           endIndent: 10,
                           color: Colors.white,

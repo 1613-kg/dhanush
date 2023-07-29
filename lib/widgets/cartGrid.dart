@@ -31,16 +31,20 @@ class _cartGrid extends State<cartGrid> {
             .contains(FirebaseAuth.instance.currentUser!.uid))
         ? true
         : false;
-    updatePrice = widget.price;
+    updatePrice = widget.price * widget.quantity;
   }
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.sizeOf(context).height;
+    var widht = MediaQuery.sizeOf(context).width;
+    var textTheme = Theme.of(context).primaryTextTheme;
+    var colorTheme = Theme.of(context).primaryColor;
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        border: Border.all(color: Colors.white30, width: 1),
+        border: Border.all(color: colorTheme.withOpacity(0.4), width: 2),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -57,9 +61,18 @@ class _cartGrid extends State<cartGrid> {
                 width: 20,
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.itemsData.titleName),
-                  Text(widget.itemsData.brand),
+                  Text(
+                    widget.itemsData.titleName[0].toUpperCase() +
+                        widget.itemsData.titleName.substring(1),
+                    style: textTheme.bodyLarge,
+                  ),
+                  Text(
+                    widget.itemsData.brand[0].toUpperCase() +
+                        widget.itemsData.brand.substring(1),
+                    style: textTheme.bodyLarge,
+                  ),
                 ],
               ),
               SizedBox(
@@ -69,7 +82,7 @@ class _cartGrid extends State<cartGrid> {
                 children: [
                   Row(
                     children: [
-                      (widget.quantity == 0)
+                      (widget.quantity == 1)
                           ? InkWell(
                               onTap: () async {
                                 await DatabaseServices(
@@ -102,7 +115,7 @@ class _cartGrid extends State<cartGrid> {
                                         color: Colors.white30, width: 1),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Icon(Icons.add)),
+                                  child: Icon(Icons.remove)),
                             ),
                       SizedBox(
                         width: 10,
@@ -167,6 +180,7 @@ class _cartGrid extends State<cartGrid> {
             height: 40,
             width: double.infinity,
             child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: colorTheme),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -177,7 +191,10 @@ class _cartGrid extends State<cartGrid> {
                                 quantity: widget.quantity,
                               )));
                 },
-                child: Text("Buy Now")),
+                child: Text(
+                  "Buy Now",
+                  style: TextStyle(color: Colors.white),
+                )),
           ),
         ],
       ),

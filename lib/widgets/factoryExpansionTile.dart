@@ -16,6 +16,8 @@ class factoryExpansionTile extends StatefulWidget {
 class _factoryExpansionTileState extends State<factoryExpansionTile> {
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).primaryTextTheme;
+    var colorTheme = Theme.of(context).primaryColor;
     final data = widget.factoryData;
     return InkWell(
       onDoubleTap: () {
@@ -28,37 +30,24 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
       },
       child: ExpansionTile(
         childrenPadding: EdgeInsets.all(10),
-        title: Text(data.name),
-        subtitle: Text(data.location),
+        title: Text(data.name[0].toUpperCase() + data.name.substring(1)),
+        subtitle:
+            Text(data.location[0].toUpperCase() + data.location.substring(1)),
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(""),
+          backgroundColor: colorTheme,
+          child: Text(
+            data.name[0].toUpperCase(),
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         children: [
           Column(
             children: [
               Row(
                 children: [
-                  Column(
-                    children: [
-                      Text("Loaded Trucks: 0"),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text("Trucks Left: 0"),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 140,
-                  ),
-                  TextButton(onPressed: () {}, child: Text("Update")),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                children: [
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: colorTheme.withOpacity(0.8)),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -66,11 +55,16 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
                                 builder: (context) =>
                                     stockScreen(factoryData: data)));
                       },
-                      child: Text("Stock")),
+                      child: Text(
+                        "Stock",
+                        style: TextStyle(color: Colors.white),
+                      )),
                   SizedBox(
                     width: 20,
                   ),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: colorTheme.withOpacity(0.8)),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -78,11 +72,16 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
                                 builder: (context) =>
                                     partyScreen(factoryData: data)));
                       },
-                      child: Text("Party")),
+                      child: Text(
+                        "Party",
+                        style: TextStyle(color: Colors.white),
+                      )),
                   SizedBox(
                     width: 20,
                   ),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: colorTheme.withOpacity(0.8)),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -90,7 +89,10 @@ class _factoryExpansionTileState extends State<factoryExpansionTile> {
                                 builder: (context) =>
                                     transportScreen(factoryData: data)));
                       },
-                      child: Text("Transport")),
+                      child: Text(
+                        "Transport",
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ],
               ),
             ],

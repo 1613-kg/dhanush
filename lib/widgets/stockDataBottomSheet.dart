@@ -3,6 +3,8 @@ import 'package:dhanush/services/databaseServices.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'loading.dart';
+
 class stockDataBottomSheet extends StatefulWidget {
   String factoryId;
   stockDataBottomSheet({super.key, required this.factoryId});
@@ -24,131 +26,144 @@ class _stockDataBottomSheetState extends State<stockDataBottomSheet> {
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: SingleChildScrollView(
-        child: Card(
-          //elevation: 5,
-          child: Container(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _type = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty)
-                          return "Field cannot be empty";
-                        else
-                          return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter Stock type",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _amount = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty)
-                          return "Field cannot be empty";
-                        else
-                          return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter amount",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _purchasedFrom = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty)
-                          return "Field cannot be empty";
-                        else
-                          return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter Purchasing Party",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-
-                    SizedBox(
-                      height: 15,
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Lab Check"),
-                        Switch(
-                            value: _labChecked,
+      child: (isLoading)
+          ? loading()
+          : SingleChildScrollView(
+              child: Card(
+                //elevation: 5,
+                child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
                             onChanged: (val) {
                               setState(() {
-                                _labChecked = val;
+                                _type = val;
                               });
-                            }),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                            onTap: () => datepicker(),
-                            child: Text("Change date:")),
-                        Text(_purchasedDate.toString()),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    //(widget.data.id == null)
-                    ElevatedButton(
-                        onPressed: () {
-                          _addStockData();
-                        },
-                        child: Text("Upload"))
-                    // : ElevatedButton(
-                    //     onPressed: () {
-                    //       setState(() {
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Field cannot be empty";
+                              else
+                                return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter Stock type",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _amount = val;
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Field cannot be empty";
+                              else
+                                return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter amount",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _purchasedFrom = val;
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Field cannot be empty";
+                              else
+                                return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter Purchasing Party",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
 
-                    //     },
-                    //     child: Text("Update")),
-                    //     }
-                    // )
-                  ],
-                ),
-              )),
-        ),
-      ),
+                          SizedBox(
+                            height: 15,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Lab Check"),
+                              Switch(
+                                  activeColor: Theme.of(context).primaryColor,
+                                  value: _labChecked,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _labChecked = val;
+                                    });
+                                  }),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                  onTap: () => datepicker(),
+                                  child: Text(
+                                    "Change date:",
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor),
+                                  )),
+                              Text(_purchasedDate.toString()),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          //(widget.data.id == null)
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor),
+                              onPressed: () {
+                                _addStockData();
+                              },
+                              child: Text(
+                                "Upload",
+                                style: TextStyle(color: Colors.white),
+                              ))
+                          // : ElevatedButton(
+                          //     onPressed: () {
+                          //       setState(() {
+
+                          //     },
+                          //     child: Text("Update")),
+                          //     }
+                          // )
+                        ],
+                      ),
+                    )),
+              ),
+            ),
     );
   }
 

@@ -43,8 +43,17 @@ class _favouritesScreenState extends State<favouritesScreen> {
     var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text("Wishlist"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Wishlist",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: StreamBuilder(
         stream: user,

@@ -44,10 +44,20 @@ class _transportScreenState extends State<transportScreen> {
   @override
   Widget build(BuildContext context) {
     final data = widget.factoryData;
+    var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Transport"),
-          backgroundColor: Colors.redAccent,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(
+            "Transport",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -55,15 +65,22 @@ class _transportScreenState extends State<transportScreen> {
               Container(
                 margin: EdgeInsets.all(10),
                 child: Card(
+                  color: colorTheme,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("Transport in ${data.name}"),
+                      Text(
+                          "Party in ${widget.factoryData.name[0].toUpperCase() + widget.factoryData.name.substring(1)}"),
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: colorTheme),
                           onPressed: () {
                             _addTransportData(context);
                           },
-                          child: Text("Add"))
+                          child: Text(
+                            "Add",
+                            style: TextStyle(color: Colors.white),
+                          ))
                     ],
                   ),
                 ),

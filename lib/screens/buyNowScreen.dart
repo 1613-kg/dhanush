@@ -111,6 +111,8 @@ class _buyNowScreenState extends State<buyNowScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).primaryTextTheme;
+    var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -133,18 +135,26 @@ class _buyNowScreenState extends State<buyNowScreen> {
         margin: EdgeInsets.all(10),
         child: (_value == 1)
             ? ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: colorTheme),
                 onPressed: () {
                   _addOrderData();
                 },
-                child: Text("Continue"),
+                child: Text(
+                  "Continue",
+                  style: TextStyle(color: Colors.white),
+                ),
               )
             : ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: colorTheme),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     openCheckout();
                   }
                 },
-                child: Text('Proceed To Pay'),
+                child: Text(
+                  'Proceed To Pay',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
       ),
       body: SafeArea(
@@ -183,7 +193,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                               ),
                               textField(
                                 hint: "House No./Flat No.",
-                                inputType: TextInputType.multiline,
+                                inputType: TextInputType.number,
                                 controller: _houseNumber,
                               ),
                             ],
@@ -224,7 +234,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                                 height: 10,
                               ),
                               TextFormField(
-                                cursorColor: Colors.redAccent,
+                                cursorColor: colorTheme,
                                 controller: _landmark,
                                 keyboardType: TextInputType.multiline,
                                 decoration: InputDecoration(
@@ -233,11 +243,10 @@ class _buyNowScreenState extends State<buyNowScreen> {
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         borderSide:
-                                            BorderSide(color: Colors.black26)),
+                                            BorderSide(color: colorTheme)),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          BorderSide(color: Colors.black26),
+                                      borderSide: BorderSide(color: colorTheme),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -271,19 +280,18 @@ class _buyNowScreenState extends State<buyNowScreen> {
                                     floorNumber = value;
                                   });
                                 },
-                                cursorColor: Colors.redAccent,
-                                keyboardType: TextInputType.multiline,
+                                cursorColor: colorTheme,
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     hintText: "Floor Number",
                                     //helperText: titleText,
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         borderSide:
-                                            BorderSide(color: Colors.black26)),
+                                            BorderSide(color: colorTheme)),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
-                                      borderSide:
-                                          BorderSide(color: Colors.black26),
+                                      borderSide: BorderSide(color: colorTheme),
                                     ),
                                     errorBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10),
@@ -354,7 +362,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                                   ),
                                   textField(
                                     hint: "Enter pincode",
-                                    inputType: TextInputType.multiline,
+                                    inputType: TextInputType.number,
                                     controller: _pincode,
                                   ),
                                 ],
@@ -386,6 +394,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                           Row(
                             children: [
                               Radio(
+                                  activeColor: colorTheme,
                                   value: 1,
                                   groupValue: _value,
                                   onChanged: (val) {
@@ -399,6 +408,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                           Row(
                             children: [
                               Radio(
+                                  activeColor: colorTheme,
                                   value: 2,
                                   groupValue: _value,
                                   onChanged: (val) {
@@ -453,7 +463,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
             return "Field cannot be empty";
           }
         },
-        cursorColor: Colors.redAccent,
+        cursorColor: Theme.of(context).primaryColor,
         controller: controller,
         keyboardType: inputType,
         decoration: InputDecoration(
@@ -461,10 +471,10 @@ class _buyNowScreenState extends State<buyNowScreen> {
             //helperText: titleText,
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Colors.black26)),
+                borderSide: BorderSide(color: Theme.of(context).primaryColor)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.black26),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

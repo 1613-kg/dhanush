@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dhanush/model/factoryData.dart';
+import 'package:dhanush/widgets/factoryDetailsWidget.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/imageSlider.dart';
 
 class factoryDetailsScreen extends StatelessWidget {
   FactoryData factoryData;
@@ -15,49 +18,47 @@ class factoryDetailsScreen extends StatelessWidget {
     final data = factoryData;
     return Scaffold(
       appBar: AppBar(
-        title: Text(data.name),
-        backgroundColor: Colors.redAccent,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          factoryData.name[0].toUpperCase() + data.name.substring(1),
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Column(
-        children: [
-          Stack(
-            children: [
-              CachedNetworkImage(
-                height: height / 4,
-                width: widht,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.person,
-                  size: 150,
-                ),
-                //radius: 150,
-                imageUrl:
-                    "https://images.unsplash.com/photo-1532264523420-881a47db012d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9",
+      body: SingleChildScrollView(
+          child: Container(
+        child: Column(
+          children: [
+            imageSlider(images: data.imageUrl),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  factoryDetailsWidget(title: "Name", content: "${data.name}"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  factoryDetailsWidget(
+                      title: "Location", content: "${data.location}"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  factoryDetailsWidget(
+                      title: "About", content: "${data.description}"),
+                ],
               ),
-              Positioned(
-                  bottom: 10,
-                  left: 20,
-                  child: Column(
-                    children: [Text(data.name), Text(data.location)],
-                  )),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Divider(
-            thickness: 2,
-            color: Colors.redAccent,
-            indent: 30,
-            endIndent: 30,
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Text(data.description),
-        ],
-      ),
+            ),
+          ],
+        ),
+      )),
     );
   }
 }

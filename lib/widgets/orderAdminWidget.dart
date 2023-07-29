@@ -78,7 +78,7 @@ class _orderAdminWidgetState extends State<orderAdminWidget> {
             bottom: 120,
             right: 10,
             child: Text(
-              "Price: ${widget.orderData.price}",
+              "Price: ${widget.orderData.price} (${widget.orderData.paymentType == "Cash on delivery" ? "Cod" : "Paid Online"})",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
             ),
           ),

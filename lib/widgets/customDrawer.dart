@@ -32,35 +32,44 @@ class customDrawer extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           children: [
-            CachedNetworkImage(
-                width: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => CircleAvatar(
-                      child: Icon(
-                        Icons.person,
-                        size: 60,
-                      ),
-                      backgroundColor: colorTheme,
-                      radius: 80,
-                    ),
-                //radius: 150,
-                imageUrl: userData.profilePic),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              userData.userName,
-              textAlign: TextAlign.center,
-              style: textTheme.bodyLarge,
+            Container(
+              decoration: BoxDecoration(
+                color: colorTheme,
+                shape: BoxShape.rectangle,
+                border: Border.all(color: Colors.black54, width: 1),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: ListTile(
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+              ),
             ),
             SizedBox(
-              height: 30,
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                userData.userName.toUpperCase(),
+                style: textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Divider(
               height: 2,
             ),
             ListTile(
+              focusColor: colorTheme,
               onTap: () {
                 Navigator.pushAndRemoveUntil(
                     context,
@@ -70,7 +79,7 @@ class customDrawer extends StatelessWidget {
               selectedColor: Theme.of(context).primaryColor,
               selected: true,
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              leading: Icon(Icons.group),
+              leading: Icon(Icons.home),
               title: Text("Home", style: textTheme.bodyLarge),
             ),
             ListTile(
@@ -102,7 +111,7 @@ class customDrawer extends StatelessWidget {
                     selected: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    leading: const Icon(Icons.gif_box),
+                    leading: const Icon(Icons.wallet_travel_sharp),
                     title: Text(
                       "Order History",
                       style: textTheme.bodyLarge,
@@ -117,7 +126,7 @@ class customDrawer extends StatelessWidget {
                     selected: true,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    leading: const Icon(Icons.gif_box),
+                    leading: const Icon(Icons.wallet_travel_sharp),
                     title: Text(
                       "Order Details",
                       style: textTheme.bodyLarge,
@@ -145,7 +154,7 @@ class customDrawer extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => adminServices(
-                                    userName: userData.userName,
+                                    userData: userData,
                                   )));
                     },
                     selectedColor: Theme.of(context).primaryColor,
@@ -221,7 +230,7 @@ class customDrawer extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 160,
             ),
             Align(
               alignment: Alignment.bottomCenter,

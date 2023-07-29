@@ -32,9 +32,18 @@ class priceWidgetBox extends StatelessWidget {
           //               batchesData: batchesData,
           //             )));
         },
-        title: Text(text),
-        leading: Icon(iconData),
-        subtitle: Text(price),
+        title: Text(
+          text,
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: Icon(
+          iconData,
+          color: Colors.white,
+        ),
+        subtitle: Text(
+          price,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }

@@ -45,11 +45,18 @@ class partyExpansionTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor),
                 onPressed: () {
                   _updatePartyData(context, data);
                 },
-                child: Text("Update")),
+                child: Text(
+                  "Update",
+                  style: TextStyle(color: Colors.white),
+                )),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor),
                 onPressed: () {
                   showDialog(
                     barrierDismissible: false,
@@ -92,7 +99,10 @@ class partyExpansionTile extends StatelessWidget {
                     },
                   );
                 },
-                child: Text("Delete"))
+                child: Text(
+                  "Delete",
+                  style: TextStyle(color: Colors.white),
+                ))
           ],
         )
       ],

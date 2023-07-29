@@ -61,8 +61,17 @@ class _allOrdersState extends State<allOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text("Order Details"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Order Details",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       drawer: customDrawer(
         userData: userData,

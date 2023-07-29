@@ -43,10 +43,21 @@ class _stockScreenState extends State<stockScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).primaryTextTheme;
+    var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Stock"),
-          backgroundColor: Colors.redAccent,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(
+            "Stocks",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -54,15 +65,22 @@ class _stockScreenState extends State<stockScreen> {
               Container(
                 margin: EdgeInsets.all(10),
                 child: Card(
+                  color: colorTheme,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("Stock in ${widget.factoryData.name}"),
+                      Text(
+                          "Stock in ${widget.factoryData.name[0].toUpperCase() + widget.factoryData.name.substring(1)}"),
                       ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: colorTheme),
                           onPressed: () {
                             _addStockData(context);
                           },
-                          child: Text("Add"))
+                          child: Text(
+                            "Add",
+                            style: TextStyle(color: Colors.white),
+                          ))
                     ],
                   ),
                 ),

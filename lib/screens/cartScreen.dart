@@ -49,8 +49,17 @@ class _cartScreenState extends State<cartScreen> {
     var colorTheme = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text("Your Cart"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "My Cart",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: StreamBuilder(
         stream: user,

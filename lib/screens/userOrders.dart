@@ -59,8 +59,17 @@ class _userOrderState extends State<userOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
-        title: Text("Your Orders"),
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Your Orders",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       drawer: customDrawer(
         userData: userData,

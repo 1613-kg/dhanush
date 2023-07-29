@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../services/databaseServices.dart';
+import 'loading.dart';
 
 class transportDataBottomSheet extends StatefulWidget {
   String factoryId;
@@ -27,151 +28,164 @@ class _transportDataBottomSheet extends State<transportDataBottomSheet> {
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          child: Card(
-            //elevation: 5,
-            child: Container(
-                padding: EdgeInsets.all(10),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            _partyName = val;
-                          });
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return "Field cannot be empty";
-                          else
-                            return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            hintText: "Enter Party Name",
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2))),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            _truckNumber = val;
-                          });
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return "Field cannot be empty";
-                          else
-                            return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            hintText: "Enter vechicle number",
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2))),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            _driverName = val;
-                          });
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return "Field cannot be empty";
-                          else
-                            return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            hintText: "Enter driver name",
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2))),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            _driverNumber = val;
-                          });
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return "Field cannot be empty";
-                          else
-                            return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            hintText: "Enter driver number",
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2))),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        onChanged: (val) {
-                          setState(() {
-                            _ownerName = val;
-                          });
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty)
-                            return "Field cannot be empty";
-                          else
-                            return null;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                            hintText: "Enter vechile owner name",
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.white, width: 2))),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                              onTap: () => datepicker(),
-                              child: Text("Change departure date:")),
-                          Text(_departureDate.toString()),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            _addTransportData();
-                          },
-                          child: Text("Upload"))
-                    ],
-                  ),
-                )),
-          ),
-        ),
-      ),
+      child: (_isLoading)
+          ? loading()
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Card(
+                  //elevation: 5,
+                  child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              onChanged: (val) {
+                                setState(() {
+                                  _partyName = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Field cannot be empty";
+                                else
+                                  return null;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  hintText: "Enter Party Name",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 2))),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            TextFormField(
+                              onChanged: (val) {
+                                setState(() {
+                                  _truckNumber = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Field cannot be empty";
+                                else
+                                  return null;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  hintText: "Enter vechicle number",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 2))),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            TextFormField(
+                              onChanged: (val) {
+                                setState(() {
+                                  _driverName = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Field cannot be empty";
+                                else
+                                  return null;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  hintText: "Enter driver name",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 2))),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            TextFormField(
+                              onChanged: (val) {
+                                setState(() {
+                                  _driverNumber = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Field cannot be empty";
+                                else
+                                  return null;
+                              },
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  hintText: "Enter driver number",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 2))),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            TextFormField(
+                              onChanged: (val) {
+                                setState(() {
+                                  _ownerName = val;
+                                });
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty)
+                                  return "Field cannot be empty";
+                                else
+                                  return null;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                  hintText: "Enter vechile owner name",
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 2))),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                    onTap: () => datepicker(),
+                                    child: Text(
+                                      "Change departure date:",
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    )),
+                                Text(_departureDate.toString()),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor),
+                                onPressed: () {
+                                  _addTransportData();
+                                },
+                                child: Text(
+                                  "Upload",
+                                  style: TextStyle(color: Colors.white),
+                                ))
+                          ],
+                        ),
+                      )),
+                ),
+              ),
+            ),
     );
   }
 

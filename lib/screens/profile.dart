@@ -38,6 +38,7 @@ class profile extends StatelessWidget {
                   child: Icon(
                     Icons.person,
                     size: 60,
+                    color: Colors.white,
                   ),
                   backgroundColor: Theme.of(context).primaryColor,
                   radius: 80,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../services/databaseServices.dart';
+import 'loading.dart';
 
 class partyDataBottomSheet extends StatefulWidget {
   String factoryId;
@@ -24,102 +25,110 @@ class _partyDataBottomSheet extends State<partyDataBottomSheet> {
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: SingleChildScrollView(
-        child: Card(
-          //elevation: 5,
-          child: Container(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _partyName = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty)
-                          return "Field cannot be empty";
-                        else
-                          return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter Party Name",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _partyLocation = val;
-                        });
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty)
-                          return "Field cannot be empty";
-                        else
-                          return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter Party Location",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _paymentLeft = val;
-                        });
-                      },
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                          hintText: "Enter Payment Left",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          _paymentDone = val;
-                        });
-                      },
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                          hintText: "Enter payment done",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2))),
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    ElevatedButton(
-                        onPressed: () {
-                          _addPartyData();
-                        },
-                        child: Text("Upload"))
-                  ],
-                ),
-              )),
-        ),
-      ),
+      child: (isLoading)
+          ? loading()
+          : SingleChildScrollView(
+              child: Card(
+                //elevation: 5,
+                child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _partyName = val;
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Field cannot be empty";
+                              else
+                                return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter Party Name",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _partyLocation = val;
+                              });
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Field cannot be empty";
+                              else
+                                return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter Party Location",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _paymentLeft = val;
+                              });
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                                hintText: "Enter Payment Left",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() {
+                                _paymentDone = val;
+                              });
+                            },
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                                hintText: "Enter payment done",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.white, width: 2))),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor),
+                              onPressed: () {
+                                _addPartyData();
+                              },
+                              child: Text(
+                                "Upload",
+                                style: TextStyle(color: Colors.white),
+                              ))
+                        ],
+                      ),
+                    )),
+              ),
+            ),
     );
   }
 

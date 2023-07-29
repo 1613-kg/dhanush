@@ -46,9 +46,17 @@ class _instagram extends State<instagram> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Instagram"),
-        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Instagram",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: WebViewWidget(
         controller: _controller,

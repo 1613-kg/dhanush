@@ -53,7 +53,7 @@ dependencies:
   http:
   webview_flutter:
   social_media_flutter: ^0.0.2
-  flutter_webview_plugin:
+  
 
 dev_dependencies:
   flutter_test:

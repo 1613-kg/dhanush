@@ -46,9 +46,17 @@ class _facebok extends State<facebok> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Facebook"),
-        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Facebook",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: WebViewWidget(
         controller: _controller,

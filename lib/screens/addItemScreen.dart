@@ -33,15 +33,26 @@ class _addItemScreenState extends State<addItemScreen> {
   Widget build(BuildContext context) {
     var height = MediaQuery.sizeOf(context).height;
     var widht = MediaQuery.sizeOf(context).width;
+    var colorTheme = Theme.of(context).primaryColor;
+    var textTheme = Theme.of(context).primaryTextTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Item"),
-        backgroundColor: Colors.redAccent,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          "Add Item",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: SingleChildScrollView(
-        child: (isLoading)
-            ? loading()
-            : Container(
+      body: (isLoading)
+          ? loading()
+          : SingleChildScrollView(
+              child: Container(
                 margin: EdgeInsets.all(20),
                 child: Form(
                   key: formKey,
@@ -55,8 +66,7 @@ class _addItemScreenState extends State<addItemScreen> {
                         children: [
                           Text(
                             "Item Name",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textTheme.titleLarge,
                           ),
                           SizedBox(
                             height: 10,
@@ -65,7 +75,8 @@ class _addItemScreenState extends State<addItemScreen> {
                               hint: "Bottle",
                               inputType: TextInputType.multiline,
                               controller: _itemNameController,
-                              maxLine: 1),
+                              maxLine: 1,
+                              color: colorTheme),
                         ],
                       ),
                       SizedBox(
@@ -77,17 +88,18 @@ class _addItemScreenState extends State<addItemScreen> {
                         children: [
                           Text(
                             "Brand",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textTheme.titleLarge,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           textField(
-                              hint: "Dhanush",
-                              inputType: TextInputType.multiline,
-                              controller: _brandController,
-                              maxLine: 1),
+                            hint: "Dhanush",
+                            inputType: TextInputType.multiline,
+                            controller: _brandController,
+                            maxLine: 1,
+                            color: colorTheme,
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -102,17 +114,18 @@ class _addItemScreenState extends State<addItemScreen> {
                         children: [
                           Text(
                             "Quantity",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textTheme.titleLarge,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           textField(
-                              hint: "15 L",
-                              inputType: TextInputType.multiline,
-                              controller: _quantityController,
-                              maxLine: 1),
+                            hint: "15 L",
+                            inputType: TextInputType.multiline,
+                            controller: _quantityController,
+                            maxLine: 1,
+                            color: colorTheme,
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -124,17 +137,18 @@ class _addItemScreenState extends State<addItemScreen> {
                         children: [
                           Text(
                             "Item Unit",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textTheme.titleLarge,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           textField(
-                              hint: "Litre",
-                              inputType: TextInputType.multiline,
-                              controller: _unitController,
-                              maxLine: 1),
+                            hint: "Litre",
+                            inputType: TextInputType.multiline,
+                            controller: _unitController,
+                            maxLine: 1,
+                            color: colorTheme,
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -149,17 +163,18 @@ class _addItemScreenState extends State<addItemScreen> {
                         children: [
                           Text(
                             "Item Description",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                            style: textTheme.titleLarge,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           textField(
-                              hint: "This product is good for health...",
-                              inputType: TextInputType.multiline,
-                              controller: _itemDescController,
-                              maxLine: 4),
+                            hint: "This product is good for health...",
+                            inputType: TextInputType.multiline,
+                            controller: _itemDescController,
+                            maxLine: 4,
+                            color: colorTheme,
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -167,8 +182,7 @@ class _addItemScreenState extends State<addItemScreen> {
                       ),
                       Text(
                         "Images",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: textTheme.titleLarge,
                       ),
                       GridView.builder(
                         itemCount: _image.length + 1,
@@ -234,17 +248,23 @@ class _addItemScreenState extends State<addItemScreen> {
                         height: 20,
                       ),
                       Container(
+                          height: 40,
                           width: double.infinity,
                           child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorTheme),
                               onPressed: () {
                                 _addItemsData();
                               },
-                              child: Text("Upload"))),
+                              child: Text(
+                                "Upload",
+                                style: TextStyle(color: Colors.white),
+                              ))),
                     ],
                   ),
                 ),
               ),
-      ),
+            ),
     );
   }
 
@@ -253,6 +273,7 @@ class _addItemScreenState extends State<addItemScreen> {
     required TextInputType inputType,
     required TextEditingController controller,
     required int maxLine,
+    required Color color,
   }) {
     return Padding(
       padding: EdgeInsets.all(0),
@@ -265,7 +286,7 @@ class _addItemScreenState extends State<addItemScreen> {
           }
         },
         maxLines: maxLine,
-        cursorColor: Colors.purpleAccent,
+        cursorColor: color,
         controller: controller,
         keyboardType: inputType,
         decoration: InputDecoration(
@@ -273,20 +294,20 @@ class _addItemScreenState extends State<addItemScreen> {
             hintStyle:
                 TextStyle(fontWeight: FontWeight.normal, color: Colors.white24),
             //helperText: titleText,
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Colors.black26)),
+            // enabledBorder: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //     borderSide: BorderSide(color: color)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.black26),
+              borderSide: BorderSide(color: color),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.red),
+              borderSide: BorderSide(color: color),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.red),
+              borderSide: BorderSide(color: color),
             ),
             border: InputBorder.none),
       ),

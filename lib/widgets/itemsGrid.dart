@@ -36,6 +36,7 @@ class _itemsGridState extends State<itemsGrid> {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).primaryTextTheme;
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -61,10 +62,23 @@ class _itemsGridState extends State<itemsGrid> {
             bottom: 10,
             left: 10,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.itemsData.brand),
-                Text(widget.itemsData.titleName),
-                Text("180")
+                Text(
+                  widget.itemsData.titleName[0].toUpperCase() +
+                      widget.itemsData.titleName.substring(1),
+                  style: textTheme.bodyLarge,
+                ),
+                Text(
+                  widget.itemsData.brand[0].toUpperCase() +
+                      widget.itemsData.brand.substring(1),
+                  style: textTheme.bodyLarge,
+                ),
+                Text(
+                  "${widget.price.toString()} Rs",
+                  style: textTheme.bodyLarge,
+                )
               ],
             ),
           ),

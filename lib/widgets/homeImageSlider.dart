@@ -13,14 +13,45 @@ class homeImageSlider extends StatefulWidget {
 class _homeImageSliderState extends State<homeImageSlider> {
   List<Widget> item = [
     Container(
-      decoration: BoxDecoration(color: Colors.amber),
-    ),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Color.fromARGB(234, 235, 105, 45).withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Image.asset(
+          'assets/images/image1.png',
+          fit: BoxFit.cover,
+          width: double.infinity,
+        )),
     Container(
-      decoration: BoxDecoration(color: Colors.blue),
-    ),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Color.fromARGB(234, 235, 105, 45).withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Image.asset(
+          'assets/images/image2.png',
+          fit: BoxFit.cover,
+          width: double.infinity,
+        )),
     Container(
-      decoration: BoxDecoration(color: Colors.green),
-    ),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Color.fromARGB(234, 235, 105, 45).withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Image.asset(
+          'assets/images/image3.png',
+          fit: BoxFit.cover,
+          width: double.infinity,
+        )),
+    Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Color.fromARGB(234, 235, 105, 45).withOpacity(0.7),
+            borderRadius: BorderRadius.circular(10)),
+        child: Image.asset(
+          'assets/images/image4.png',
+          fit: BoxFit.cover,
+          width: double.infinity,
+        )),
   ];
   int currentIndex = 0;
   @override
@@ -43,7 +74,7 @@ class _homeImageSliderState extends State<homeImageSlider> {
               }),
         ),
         Positioned(
-          right: 160,
+          right: 140,
           bottom: 10,
           child: DotsIndicator(
             dotsCount: item.length,
