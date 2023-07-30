@@ -10,17 +10,20 @@ class ItemsData {
   List<String> isAddedToCart;
   String webUrl;
   double productRating;
+  DateTime timeStamp;
 
   ItemsData(
-      this.brand,
-      this.description,
-      this.id,
-      this.quantity,
-      this.titleName,
-      this.unit,
-      this.imageUrl,
-      this.isFav,
-      this.isAddedToCart,
-      this.webUrl,
-      this.productRating);
+    this.brand,
+    this.description,
+    this.id,
+    this.quantity,
+    this.titleName,
+    this.unit,
+    this.imageUrl,
+    this.isFav,
+    this.isAddedToCart,
+    this.webUrl,
+    this.productRating,
+    this.timeStamp,
+  );
 }

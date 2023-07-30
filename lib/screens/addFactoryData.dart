@@ -143,15 +143,14 @@ class _addFactoryDataState extends State<addFactoryData> {
                                   child: Container(
                                     height: 90,
                                     width: 90,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Colors.black38, width: 1)),
                                     child: IconButton(
                                         onPressed: () {
                                           showDialogOpt(context);
                                         },
-                                        icon: Icon(Icons.add)),
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: colorTheme,
+                                        )),
                                   ),
                                 )
                               : Stack(
@@ -272,7 +271,14 @@ class _addFactoryDataState extends State<addFactoryData> {
           isLoading = false;
         });
       } else {
-        AuthService().uploadFactoryPictures(_image).then((value) {
+        DateTime timeStamp = DateTime.now();
+        AuthService()
+            .uploadFactoryPictures(
+          _image,
+          timeStamp,
+          _nameController.text,
+        )
+            .then((value) {
           setState(() {
             _imageUrl = value;
           });
@@ -282,7 +288,11 @@ class _addFactoryDataState extends State<addFactoryData> {
                   _locationController.text,
                   _descController.text,
                   _imageUrl,
-                  _nameController.text, [], [], []))
+                  _nameController.text,
+                  [],
+                  [],
+                  [],
+                  timeStamp))
               .whenComplete(() => isLoading = false);
           Navigator.pop(context);
           showSnackbar(context, Colors.green, "Data Uploaded Successfully");

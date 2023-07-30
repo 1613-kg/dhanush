@@ -7,7 +7,16 @@ class FactoryData {
   List<String> stockData;
   List<String> partyData;
   List<String> transportData;
+  DateTime timeStamp;
 
-  FactoryData(this.id, this.location, this.description, this.imageUrl,
-      this.name, this.partyData, this.stockData, this.transportData);
+  FactoryData(
+      this.id,
+      this.location,
+      this.description,
+      this.imageUrl,
+      this.name,
+      this.partyData,
+      this.stockData,
+      this.transportData,
+      this.timeStamp);
 }

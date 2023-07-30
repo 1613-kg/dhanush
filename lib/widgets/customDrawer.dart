@@ -85,11 +85,12 @@ class customDrawer extends StatelessWidget {
             ListTile(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => profile(
-                              userData: userData,
-                            )));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => profile(
+                            userData: userData,
+                          )),
+                );
               },
               selectedColor: Theme.of(context).primaryColor,
               selected: true,
@@ -104,8 +105,10 @@ class customDrawer extends StatelessWidget {
             (!userData.isAdmin)
                 ? ListTile(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => userOrder()));
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => userOrder()),
+                          (route) => false);
                     },
                     selectedColor: Theme.of(context).primaryColor,
                     selected: true,
@@ -119,8 +122,10 @@ class customDrawer extends StatelessWidget {
                   )
                 : ListTile(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => allOrders()));
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => allOrders()),
+                          (route) => false);
                     },
                     selectedColor: Theme.of(context).primaryColor,
                     selected: true,

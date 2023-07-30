@@ -45,6 +45,12 @@ class DatabaseServices {
     });
   }
 
+  Future updateProfile(String profile) async {
+    return await userCollection.doc(uid).update({
+      "profilePic": profile,
+    });
+  }
+
   Future gettingUserData(String email) async {
     QuerySnapshot snapshot =
         await userCollection.where("email", isEqualTo: email).get();
@@ -121,6 +127,7 @@ class DatabaseServices {
       "stocks": [],
       "party": [],
       "transport": [],
+      "timeStamp": factoryData.timeStamp,
     });
     await factoryDocumentReference.update({
       "factoryId": factoryDocumentReference.id,
@@ -137,6 +144,7 @@ class DatabaseServices {
       "stocks": factoryData.stockData,
       "party": factoryData.partyData,
       "transport": factoryData.transportData,
+      "timeStamp": factoryData.timeStamp,
     });
   }
 
@@ -272,6 +280,7 @@ class DatabaseServices {
       "isAddedToCart": itemsData.isAddedToCart,
       "productRating": itemsData.productRating,
       "imageUrl": itemsData.imageUrl,
+      "timeStamp": itemsData.timeStamp,
     });
     await itemsDocumentReference.update({
       "itemsId": itemsDocumentReference.id,
@@ -291,6 +300,7 @@ class DatabaseServices {
       "isAddedToCart": itemsData.isAddedToCart,
       "productRating": itemsData.productRating,
       "imageUrl": itemsData.imageUrl,
+      "timeStamp": itemsData.timeStamp,
     });
   }
 

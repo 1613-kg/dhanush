@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 const textInputDecoration = InputDecoration(
+    contentPadding: EdgeInsets.all(15),
     enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Color.fromARGB(255, 216, 121, 48))),
+        borderSide: BorderSide(color: Color.fromARGB(234, 235, 105, 45))),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
+      borderSide: BorderSide(color: Color.fromARGB(234, 235, 105, 45)),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
+      borderSide: BorderSide(color: Colors.red),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(color: Color.fromARGB(255, 245, 121, 26)),
+      borderSide: BorderSide(color: Colors.red),
     ),
     border: InputBorder.none);
 

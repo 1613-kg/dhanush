@@ -20,7 +20,7 @@ class orderAdminWidget extends StatefulWidget {
 
 class _orderAdminWidgetState extends State<orderAdminWidget> {
   ItemsData itemsData = ItemsData("brand", "description", "id", 0, "titleName",
-      "unit", ["imageUrl"], [""], [], "", 0);
+      "unit", ["imageUrl"], [""], [], "", 0, DateTime.now());
 
   getItemsData(String itemId) async {
     QuerySnapshot snapshot =

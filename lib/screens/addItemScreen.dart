@@ -196,15 +196,14 @@ class _addItemScreenState extends State<addItemScreen> {
                                   child: Container(
                                     height: 90,
                                     width: 90,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Colors.black38, width: 1)),
                                     child: IconButton(
                                         onPressed: () {
                                           showDialogOpt(context);
                                         },
-                                        icon: Icon(Icons.add)),
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: colorTheme,
+                                        )),
                                   ),
                                 )
                               : Stack(
@@ -325,7 +324,14 @@ class _addItemScreenState extends State<addItemScreen> {
           isLoading = false;
         });
       } else {
-        AuthService().uploadFactoryPictures(_image).then((value) {
+        DateTime timeStamp = DateTime.now();
+        AuthService()
+            .uploadFactoryPictures(
+          _image,
+          timeStamp,
+          _itemNameController.text,
+        )
+            .then((value) {
           setState(() {
             _imageUrl = value;
           });
@@ -341,7 +347,8 @@ class _addItemScreenState extends State<addItemScreen> {
                   [],
                   [],
                   "",
-                  0.0))
+                  0.0,
+                  timeStamp))
               .whenComplete(() => isLoading = false);
           Navigator.pop(context);
           showSnackbar(context, Colors.green, "Data Uploaded Successfully");

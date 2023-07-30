@@ -97,7 +97,7 @@ class _loginScreenState extends State<loginScreen> {
                       children: [
                         Text(
                           "Login as a",
-                          style: textTheme.bodyLarge,
+                          style: textTheme.bodyMedium,
                         ),
                         SizedBox(
                           width: 10,
@@ -126,11 +126,13 @@ class _loginScreenState extends State<loginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            textInputAction: TextInputAction.next,
                             decoration: textInputDecoration.copyWith(
                                 labelText: "Email",
-                                labelStyle: textTheme.bodySmall,
+                                labelStyle: textTheme.bodyMedium,
                                 prefixIcon: Icon(
                                   Icons.mail,
+                                  color: Theme.of(context).primaryColor,
                                 )),
                             onChanged: (val) {
                               setState(() {
@@ -151,12 +153,16 @@ class _loginScreenState extends State<loginScreen> {
                           // password
 
                           TextFormField(
+                            textInputAction: (dropDownValue == 'Admin')
+                                ? TextInputAction.next
+                                : TextInputAction.done,
                             obscureText: true,
                             decoration: textInputDecoration.copyWith(
                                 labelText: "Password",
-                                labelStyle: textTheme.bodySmall,
+                                labelStyle: textTheme.bodyMedium,
                                 prefixIcon: Icon(
                                   Icons.lock,
+                                  color: Theme.of(context).primaryColor,
                                 )),
                             onChanged: (val) {
                               setState(() {
@@ -183,12 +189,14 @@ class _loginScreenState extends State<loginScreen> {
                           // adminKey
                           (dropDownValue == 'Admin')
                               ? TextFormField(
+                                  textInputAction: TextInputAction.done,
                                   obscureText: true,
                                   decoration: textInputDecoration.copyWith(
                                       labelText: "Admin Password",
-                                      labelStyle: textTheme.bodySmall,
+                                      labelStyle: textTheme.bodyMedium,
                                       prefixIcon: Icon(
                                         Icons.lock,
+                                        color: Theme.of(context).primaryColor,
                                       )),
                                   onChanged: (val) {
                                     setState(() {
@@ -237,7 +245,7 @@ class _loginScreenState extends State<loginScreen> {
                     Text.rich(
                       TextSpan(
                         text: "Don't have an account? ",
-                        style: textTheme.bodySmall,
+                        style: textTheme.bodyMedium,
                         children: <TextSpan>[
                           TextSpan(
                               text: "Create",

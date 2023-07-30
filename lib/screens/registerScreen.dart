@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dhanush/screens/loginScreen.dart';
 import 'package:dhanush/widgets/loading.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
@@ -214,7 +213,7 @@ class _registerScreenState extends State<registerScreen> {
                           hintText: "Confrim Password",
                           icon: Icons.lock,
                           inputType: TextInputType.multiline,
-                          controller: _passwordController,
+                          controller: _confirmPasswordController,
                           action: (dropDownValue == "User")
                               ? TextInputAction.done
                               : TextInputAction.next),
@@ -255,7 +254,14 @@ class _registerScreenState extends State<registerScreen> {
                         width: double.infinity,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            if (img != null) {
+                              await authService.uploadProPic(img).then((value) {
+                                setState(() {
+                                  profilePic = value;
+                                });
+                              });
+                            }
                             register();
                           },
                           child: Text(
@@ -272,7 +278,7 @@ class _registerScreenState extends State<registerScreen> {
                       Text.rich(
                         TextSpan(
                           text: "Have an existing account? ",
-                          style: textTheme.bodySmall,
+                          style: textTheme.bodyMedium,
                           children: <TextSpan>[
                             TextSpan(
                                 text: "Login now",
@@ -316,6 +322,7 @@ class _registerScreenState extends State<registerScreen> {
         keyboardType: inputType,
         textInputAction: action,
         decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(15),
             hintText: hintText,
             prefixIcon: Icon(
               icon,
@@ -330,11 +337,11 @@ class _registerScreenState extends State<registerScreen> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: color),
+              borderSide: BorderSide(color: Colors.red),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: color),
+              borderSide: BorderSide(color: Colors.red),
             ),
             border: InputBorder.none),
       ),

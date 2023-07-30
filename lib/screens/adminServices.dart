@@ -82,7 +82,8 @@ class _adminServicesState extends State<adminServices> {
           child: Column(
             children: [
               CachedNetworkImage(
-                  width: double.infinity,
+                  height: height / 4,
+                  width: widht / 1.5,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => CircleAvatar(
@@ -140,6 +141,7 @@ class _adminServicesState extends State<adminServices> {
                               data['party'].cast<String>(),
                               data['stocks'].cast<String>(),
                               data['transport'].cast<String>(),
+                              data['timeStamp'].toDate(),
                             ),
                           );
                         },

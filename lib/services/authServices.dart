@@ -44,11 +44,13 @@ class AuthService {
     }
   }
 
-  Future<List<String>> uploadFactoryPictures(List<File> images) async {
+  Future<List<String>> uploadFactoryPictures(
+      List<File> images, DateTime timeStamp, String name) async {
     Reference ref = FirebaseStorage.instance
         .ref()
-        .child('Factory')
-        .child(FirebaseAuth.instance.currentUser!.uid);
+        .child('factoryImages')
+        .child(name)
+        .child(timeStamp.toString());
 
     List<String> _imagesUrl = [];
     for (int i = 0; i < images.length; i++) {
@@ -59,6 +61,72 @@ class AuthService {
     }
 
     return _imagesUrl;
+  }
+
+  Future<void> deleteEventPic(DateTime timeStamp, String name) async {
+    // Reference photoRef = await FirebaseStorage.instance.refFromURL(imageUrl);
+    // await photoRef.delete();
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('factoryImages')
+        .child(name)
+        .child(timeStamp.toString());
+
+    await ref.delete();
+  }
+
+  Future<List<String>> uploadItemPictures(
+      List<File> images, DateTime timeStamp, String name) async {
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('itemImages')
+        .child(name)
+        .child(timeStamp.toString());
+
+    List<String> _imagesUrl = [];
+    for (int i = 0; i < images.length; i++) {
+      UploadTask uploadTask = ref.child(i.toString()).putFile(images[i]);
+      TaskSnapshot snapshot = await uploadTask;
+      String imageDwnUrl = await snapshot.ref.getDownloadURL();
+      _imagesUrl.add(imageDwnUrl);
+    }
+
+    return _imagesUrl;
+  }
+
+  Future<String> uploadProPic(File? image) async {
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('profilePics')
+        .child(FirebaseAuth.instance.currentUser!.uid);
+
+    UploadTask uploadTask = ref.putFile(image!);
+    TaskSnapshot snapshot = await uploadTask;
+    String imageDwnUrl = await snapshot.ref.getDownloadURL();
+    return imageDwnUrl;
+  }
+
+  Future<void> deleteProPic() async {
+    // Reference photoRef = await FirebaseStorage.instance.refFromURL(imageUrl);
+    // await photoRef.delete();
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('profilePics')
+        .child(FirebaseAuth.instance.currentUser!.uid);
+
+    await ref.delete();
+  }
+
+  Future<void> deleteItemPic(DateTime timeStamp, String name) async {
+    // Reference photoRef = await FirebaseStorage.instance.refFromURL(imageUrl);
+    // await photoRef.delete();
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child('itemImages')
+        .child(name)
+        .child(timeStamp.toString());
+
+    await ref.delete();
   }
 
   // signout

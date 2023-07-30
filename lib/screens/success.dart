@@ -21,19 +21,21 @@ class successScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundColor: Colors.green,
-              radius: 100,
+              backgroundColor: Colors.white,
+              radius: 80,
               child: Icon(
-                Icons.visibility,
-                color: Colors.white,
+                Icons.done,
+                size: 100,
+                color: Colors.green,
               ),
             ),
             SizedBox(
               height: 20,
             ),
             Text(
-              "Success".toUpperCase(),
-              style: TextStyle(color: Colors.white, fontSize: 40),
+              "Order Placed".toUpperCase(),
+              style: TextStyle(color: Colors.white, fontSize: 25),
+              textAlign: TextAlign.center,
             ),
           ],
         )),

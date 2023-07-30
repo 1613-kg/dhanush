@@ -126,7 +126,8 @@ class _searchScreenState extends State<searchScreen> {
                               data['isFav'].cast<String>(),
                               data['isAddedToCart'].cast<String>(),
                               data['webUrl'],
-                              data['productRating']));
+                              data['productRating'],
+                              data['timeStamp'].toDate()));
                     },
                   );
                 },

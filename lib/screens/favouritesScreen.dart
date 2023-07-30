@@ -93,7 +93,8 @@ class _favouritesScreenState extends State<favouritesScreen> {
                                   data2['isFav'].cast<String>(),
                                   data2['isAddedToCart'].cast<String>(),
                                   data2['webUrl'],
-                                  data2['productRating']),
+                                  data2['productRating'],
+                                  data2['timeStamp'].toDate()),
                             );
                           } else
                             return Container();
