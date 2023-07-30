@@ -5,6 +5,7 @@ import 'package:dhanush/model/userData.dart';
 import 'package:dhanush/screens/searchScreen.dart';
 
 import 'package:dhanush/services/databaseServices.dart';
+import 'package:dhanush/services/getPrices.dart';
 import 'package:dhanush/widgets/itemsGrid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class homeScreen extends StatefulWidget {
 }
 
 class _homeScreenState extends State<homeScreen> {
+  bool isLoading = false;
+  List<Map<String, dynamic>> _prices = [];
   UserData userData = UserData('id', 'email', 'userName', false, 'password',
       'profilePic', ['isFav'], ['isAddedToCart']);
   Stream? itemsData;
@@ -53,12 +56,29 @@ class _homeScreenState extends State<homeScreen> {
     });
   }
 
+  Future<void> _fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await Prices().fetchMustardPrices().then((value) {
+        setState(() {
+          _prices = value;
+          isLoading = false;
+        });
+      });
+    } catch (e) {
+      // Handle error
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserData();
     getItemsData();
+    _fetchData();
   }
 
   @override
@@ -92,96 +112,90 @@ class _homeScreenState extends State<homeScreen> {
       drawer: customDrawer(
         userData: userData,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              homeImageSlider(),
-              SizedBox(height: 25),
-              Text(
-                "Live Price",
-                style: textTheme.titleLarge,
+      body: (isLoading)
+          ? loading()
+          : SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    homeImageSlider(),
+                    SizedBox(height: 25),
+                    Text(
+                      "Last Updated (${_prices[4]['price']})",
+                      style: textTheme.titleLarge,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    priceWidgetBox(
+                      iconData: Icons.food_bank,
+                      price: '${_prices[1]['price']}',
+                      text: "Mustard (Sarso)",
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    priceWidgetBox(
+                      iconData: Icons.indeterminate_check_box_sharp,
+                      price: "120/L",
+                      text: "Mustard Oil",
+                    ),
+                    SizedBox(height: 25),
+                    Text(
+                      "Items Available",
+                      style: textTheme.titleLarge,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    StreamBuilder(
+                      stream: itemsData,
+                      builder: ((context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          var dataList = snapshot.data.docs;
+                          // if (snapshot.data['stocks'] != null) {
+                          if (dataList.length != 0) {
+                            return GridView.builder(
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: dataList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: widht / height),
+                                itemBuilder: (context, index) {
+                                  final data = dataList[index].data();
+                                  return itemsGrid(
+                                    price: 250,
+                                    itemsData: ItemsData(
+                                        data['brand'],
+                                        data['description'],
+                                        data['itemsId'],
+                                        data['quantity'],
+                                        data['titleName'],
+                                        data['unit'],
+                                        data['imageUrl'].cast<String>(),
+                                        data['isFav'].cast<String>(),
+                                        data['isAddedToCart'].cast<String>(),
+                                        data['webUrl'],
+                                        data['productRating'],
+                                        data['timeStamp'].toDate()),
+                                  );
+                                });
+                          } else
+                            return Container();
+                          // } else
+                          //   return Container();
+                        } else
+                          return loading();
+                      }),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              priceWidgetBox(
-                iconData: Icons.pin_drop_sharp,
-                price: "180/kg",
-                text: "Mustard",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              priceWidgetBox(
-                iconData: Icons.oil_barrel,
-                price: "120/L",
-                text: "Oil",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              priceWidgetBox(
-                iconData: Icons.cake,
-                price: "500/kg",
-                text: "Mustard Cake",
-              ),
-              SizedBox(height: 25),
-              Text(
-                "Items Available",
-                style: textTheme.titleLarge,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              StreamBuilder(
-                stream: itemsData,
-                builder: ((context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    var dataList = snapshot.data.docs;
-                    // if (snapshot.data['stocks'] != null) {
-                    if (dataList.length != 0) {
-                      return GridView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: dataList.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: widht / height),
-                          itemBuilder: (context, index) {
-                            final data = dataList[index].data();
-                            return itemsGrid(
-                              price: 250,
-                              itemsData: ItemsData(
-                                  data['brand'],
-                                  data['description'],
-                                  data['itemsId'],
-                                  data['quantity'],
-                                  data['titleName'],
-                                  data['unit'],
-                                  data['imageUrl'].cast<String>(),
-                                  data['isFav'].cast<String>(),
-                                  data['isAddedToCart'].cast<String>(),
-                                  data['webUrl'],
-                                  data['productRating'],
-                                  data['timeStamp'].toDate()),
-                            );
-                          });
-                    } else
-                      return Container();
-                    // } else
-                    //   return Container();
-                  } else
-                    return loading();
-                }),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

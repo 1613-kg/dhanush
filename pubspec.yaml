@@ -53,6 +53,8 @@ dependencies:
   http:
   webview_flutter:
   social_media_flutter: ^0.0.2
+  html:
+  flutter_rating_bar:
   
 
 dev_dependencies:

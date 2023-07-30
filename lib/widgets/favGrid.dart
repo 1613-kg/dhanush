@@ -30,6 +30,7 @@ class _favGridState extends State<favGrid> {
 
   @override
   Widget build(BuildContext context) {
+    var colorTheme = Theme.of(context).primaryColor;
     return InkWell(
       onTap: () {
         Navigator.pushReplacement(
@@ -59,6 +60,8 @@ class _favGridState extends State<favGrid> {
                 Container(
                   // width: double.infinity,
                   child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: colorTheme),
                       onPressed: () async {
                         await DatabaseServices(
                                 FirebaseAuth.instance.currentUser!.uid)
@@ -74,13 +77,16 @@ class _favGridState extends State<favGrid> {
                                   "Item removed from cart");
                         });
                       },
-                      child: Text((isAddedTocart)
-                          ? "Remove from cart"
-                          : "Add To Cart")),
+                      child: Text(
+                        (isAddedTocart) ? "Remove from cart" : "Add To Cart",
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ),
                 Container(
                   //width: double.infinity,
                   child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: colorTheme),
                       onPressed: () async {
                         await DatabaseServices(
                                 FirebaseAuth.instance.currentUser!.uid)
@@ -91,7 +97,10 @@ class _favGridState extends State<favGrid> {
                           },
                         );
                       },
-                      child: Text("Remove")),
+                      child: Text(
+                        "Remove",
+                        style: TextStyle(color: Colors.white),
+                      )),
                 ),
               ],
             ),

@@ -326,7 +326,7 @@ class _addItemScreenState extends State<addItemScreen> {
       } else {
         DateTime timeStamp = DateTime.now();
         AuthService()
-            .uploadFactoryPictures(
+            .uploadItemPictures(
           _image,
           timeStamp,
           _itemNameController.text,

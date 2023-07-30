@@ -6,6 +6,7 @@ import 'package:dhanush/screens/favouritesScreen.dart';
 import 'package:dhanush/screens/homeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../constants.dart';
 import '../services/databaseServices.dart';
@@ -285,9 +286,43 @@ class _itemDescScreenState extends State<itemDescScreen> {
                           data.description[0].toUpperCase() +
                               data.description.substring(1),
                           style: textTheme.bodyLarge,
-                          maxLines: 2,
+                          maxLines: 5,
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                width: widht,
+                height: height / 6,
+                child: Card(
+                  margin: EdgeInsets.all(10),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Product Rating",
+                          style: textTheme.bodyLarge,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        RatingBarIndicator(
+                          rating: widget.itemsData.productRating,
+                          itemCount: 5,
+                          itemSize: 40,
+                          itemBuilder: (context, _) {
+                            return Icon(
+                              Icons.star,
+                              color: colorTheme,
+                            );
+                          },
                         ),
                       ],
                     ),

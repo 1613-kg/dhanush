@@ -63,7 +63,7 @@ class AuthService {
     return _imagesUrl;
   }
 
-  Future<void> deleteEventPic(DateTime timeStamp, String name) async {
+  Future<void> deleteFactoryPic(DateTime timeStamp, String name) async {
     // Reference photoRef = await FirebaseStorage.instance.refFromURL(imageUrl);
     // await photoRef.delete();
     Reference ref = FirebaseStorage.instance

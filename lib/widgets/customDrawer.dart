@@ -1,13 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dhanush/model/userData.dart';
 import 'package:dhanush/screens/aboutUsWebView.dart';
+import 'package:dhanush/screens/adminFeedback.dart';
 import 'package:dhanush/screens/adminServices.dart';
 import 'package:dhanush/screens/allOrders.dart';
 import 'package:dhanush/screens/facebook.dart';
-import 'package:dhanush/screens/feedbaks.dart';
+
 import 'package:dhanush/screens/homeScreen.dart';
 import 'package:dhanush/screens/instagram.dart';
 import 'package:dhanush/screens/profile.dart';
+import 'package:dhanush/screens/userFeedback.dart';
 
 import 'package:dhanush/screens/userOrders.dart';
 import 'package:flutter/material.dart';
@@ -137,21 +138,42 @@ class customDrawer extends StatelessWidget {
                       style: textTheme.bodyLarge,
                     ),
                   ),
-            // ListTile(
-            //   onTap: () {
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => feedbacks()));
-            //   },
-            //   selectedColor: Theme.of(context).primaryColor,
-            //   selected: true,
-            //   contentPadding:
-            //       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            //   leading: const Icon(Icons.feedback),
-            //   title: Text(
-            //     "Feedbacks",
-            //     style: textTheme.bodyLarge,
-            //   ),
-            // ),
+            (!userData.isAdmin)
+                ? ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => userFeedback()),
+                      );
+                    },
+                    selectedColor: Theme.of(context).primaryColor,
+                    selected: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(Icons.feedback_outlined),
+                    title: Text(
+                      "My Feedbacks",
+                      style: textTheme.bodyLarge,
+                    ),
+                  )
+                : ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => adminFeedback()),
+                      );
+                    },
+                    selectedColor: Theme.of(context).primaryColor,
+                    selected: true,
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    leading: const Icon(Icons.feedback),
+                    title: Text(
+                      "Customer Feedbacks",
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
             (userData.isAdmin)
                 ? ListTile(
                     onTap: () {

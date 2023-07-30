@@ -7,7 +7,7 @@ class loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(
-          backgroundColor: Theme.of(context).primaryColor),
+          color: Theme.of(context).primaryColor, backgroundColor: Colors.white),
     );
   }
 }

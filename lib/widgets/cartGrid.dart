@@ -52,7 +52,10 @@ class _cartGrid extends State<cartGrid> {
           Row(
             children: [
               CircleAvatar(
-                child: Image.network(widget.itemsData.imageUrl[0]),
+                child: Image.network(
+                  widget.itemsData.imageUrl[0],
+                  fit: BoxFit.cover,
+                ),
                 backgroundColor:
                     Theme.of(context).primaryColor.withOpacity(0.3),
                 radius: 25,

@@ -1,9 +1,11 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:dhanush/screens/userOrders.dart';
+import 'package:dhanush/model/itemsData.dart';
+import 'package:dhanush/screens/feedbaks.dart';
 import 'package:flutter/material.dart';
 
 class successScreen extends StatelessWidget {
-  successScreen({super.key});
+  ItemsData itemsData;
+  successScreen({super.key, required this.itemsData});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,9 @@ class successScreen extends StatelessWidget {
           ],
         )),
       ),
-      nextScreen: userOrder(),
+      nextScreen: feedbacks(
+        itemsData: itemsData,
+      ),
     ));
   }
 }

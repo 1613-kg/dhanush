@@ -94,7 +94,7 @@ class _searchScreenState extends State<searchScreen> {
                   if (searchText.length > 0) {
                     documents = documents.where((element) {
                       return element
-                          .get('titleName')
+                          .get('description')
                           .toString()
                           .toLowerCase()
                           .contains(searchText.toLowerCase());

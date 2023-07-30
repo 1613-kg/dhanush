@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/factoryData.dart';
+import 'package:dhanush/model/feedback.dart';
 import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/model/orderData.dart';
 import 'package:dhanush/model/partyData.dart';
@@ -30,6 +31,9 @@ class DatabaseServices {
 
   final CollectionReference orderCollection =
       FirebaseFirestore.instance.collection("order");
+
+  final CollectionReference feedbackCollection =
+      FirebaseFirestore.instance.collection("feedback");
 
   Future savingUserData(String userName, String email, bool isAdmin,
       String profilePic, String password) async {
@@ -123,7 +127,7 @@ class DatabaseServices {
       "factoryId": '',
       "location": factoryData.location,
       "description": factoryData.description,
-      "image": [],
+      "image": factoryData.imageUrl,
       "stocks": [],
       "party": [],
       "transport": [],
@@ -304,6 +308,12 @@ class DatabaseServices {
     });
   }
 
+  Future updatingItemRating(ItemsData itemsData) async {
+    await transportCollection.doc(itemsData.id).update({
+      "productRating": itemsData.productRating,
+    });
+  }
+
   Future<bool?> isFav(String itemsId) async {
     DocumentReference userDocumentRefernce = userCollection.doc(uid);
     DocumentSnapshot documentSnapshot = await userDocumentRefernce.get();
@@ -411,5 +421,25 @@ class DatabaseServices {
 
   getOrdersData() async {
     return orderCollection.where('buyerId', isEqualTo: uid).snapshots();
+  }
+
+  Future savingFeedbackData(FeedbackData data) async {
+    DocumentReference feedbackDocumentReference = await feedbackCollection.add({
+      "feedbackId": '',
+      "content": data.content,
+      "givenBy": uid,
+      "submitDate": data.submitDate,
+    });
+    await feedbackDocumentReference.update({
+      "feedbackId": feedbackDocumentReference.id,
+    });
+  }
+
+  getAllFeedbacks() async {
+    return feedbackCollection.snapshots();
+  }
+
+  getUserFeedbacks() async {
+    return feedbackCollection.where('givenBy', isEqualTo: uid).snapshots();
   }
 }

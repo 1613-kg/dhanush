@@ -18,16 +18,16 @@ class factoryDetailsWidget extends StatelessWidget {
         ),
         Container(
           width: 230,
-          padding: EdgeInsets.all(5),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             border: Border.all(color: Colors.white30, width: 1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: AutoSizeText(
-            content,
+            content[0].toUpperCase() + content.substring(1),
             //textAlign: TextAlign.center,
-            maxLines: 2,
+            maxLines: 5,
             overflow: TextOverflow.ellipsis,
             softWrap: true,
           ),

@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dhanush/constants.dart';
+
 import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/model/orderData.dart';
 import 'package:dhanush/screens/success.dart';
@@ -520,7 +520,10 @@ class _buyNowScreenState extends State<buyNowScreen> {
 
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => successScreen()),
+          MaterialPageRoute(
+              builder: (context) => successScreen(
+                    itemsData: widget.itemsData,
+                  )),
           (route) => false);
     }
   }

@@ -1,3 +1,4 @@
+import 'package:dhanush/screens/aboutPrice.dart';
 import 'package:flutter/material.dart';
 
 class priceWidgetBox extends StatelessWidget {
@@ -25,16 +26,17 @@ class priceWidgetBox extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => sectionScreen(
-          //               batchesData: batchesData,
-          //             )));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => aboutPrice()));
         },
         title: Text(
           text,
           style: TextStyle(color: Colors.white),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.white,
+          size: 20,
         ),
         leading: Icon(
           iconData,
