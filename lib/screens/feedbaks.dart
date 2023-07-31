@@ -140,11 +140,6 @@ class _feedbacksState extends State<feedbacks> {
                       Form(
                         key: formKey,
                         child: TextFormField(
-                          onChanged: (value) {
-                            setState(() {
-                              _feedbackController.text = value;
-                            });
-                          },
                           showCursor: true,
                           maxLines: 5,
                           controller: _feedbackController,

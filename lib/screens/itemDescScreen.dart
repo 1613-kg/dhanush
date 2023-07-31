@@ -15,7 +15,12 @@ import '../widgets/imageSlider.dart';
 class itemDescScreen extends StatefulWidget {
   ItemsData itemsData;
   double price;
-  itemDescScreen({super.key, required this.itemsData, required this.price});
+  bool isAdmin;
+  itemDescScreen(
+      {super.key,
+      required this.itemsData,
+      required this.price,
+      required this.isAdmin});
 
   @override
   State<itemDescScreen> createState() => _itemDescScreenState();
@@ -78,12 +83,15 @@ class _itemDescScreenState extends State<itemDescScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => favouritesScreen(
-                              price: widget.price,
-                            )));
+                (widget.isAdmin)
+                    ? showSnackbar(context, Colors.red, "Admin can't access")
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => favouritesScreen(
+                                  price: widget.price,
+                                  isAdmin: widget.isAdmin,
+                                )));
               },
               icon: Icon(
                 Icons.favorite,
@@ -91,14 +99,16 @@ class _itemDescScreenState extends State<itemDescScreen> {
               )),
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => cartScreen(
-                              itemsData: widget.itemsData,
-                              quantity: quantity,
-                              price: widget.price,
-                            )));
+                (widget.isAdmin)
+                    ? showSnackbar(context, Colors.red, "Admin can't access")
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => cartScreen(
+                                  itemsData: widget.itemsData,
+                                  quantity: quantity,
+                                  price: widget.price,
+                                )));
               },
               icon: Icon(
                 Icons.shopping_bag,
@@ -119,19 +129,22 @@ class _itemDescScreenState extends State<itemDescScreen> {
                   style: ElevatedButton.styleFrom(
                       shape: LinearBorder(), backgroundColor: colorTheme),
                   onPressed: () async {
-                    await DatabaseServices(
-                            FirebaseAuth.instance.currentUser!.uid)
-                        .toggleIsAddedToCart(widget.itemsData.id)
-                        .then((value) {
-                      setState(() {
-                        isAddedToCart = !isAddedToCart;
-                      });
-                      (isAddedToCart)
-                          ? showSnackbar(
-                              context, Colors.green, "Item added to cart")
-                          : showSnackbar(
-                              context, Colors.red, "Item removed from cart");
-                    });
+                    (widget.isAdmin)
+                        ? showSnackbar(
+                            context, Colors.red, "Admin can't access")
+                        : await DatabaseServices(
+                                FirebaseAuth.instance.currentUser!.uid)
+                            .toggleIsAddedToCart(widget.itemsData.id)
+                            .then((value) {
+                            setState(() {
+                              isAddedToCart = !isAddedToCart;
+                            });
+                            (isAddedToCart)
+                                ? showSnackbar(
+                                    context, Colors.green, "Item added to cart")
+                                : showSnackbar(context, Colors.red,
+                                    "Item removed from cart");
+                          });
                   },
                   child: Text(
                       (isAddedToCart) ? "Remove from cart" : "Add To Cart",
@@ -145,14 +158,17 @@ class _itemDescScreenState extends State<itemDescScreen> {
                   style: ElevatedButton.styleFrom(
                       shape: LinearBorder(), backgroundColor: colorTheme),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => buyNowScreen(
-                                  itemsData: widget.itemsData,
-                                  totalAmount: widget.price * quantity,
-                                  quantity: quantity,
-                                )));
+                    (widget.isAdmin)
+                        ? showSnackbar(
+                            context, Colors.red, "Admin can't access")
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => buyNowScreen(
+                                      itemsData: widget.itemsData,
+                                      totalAmount: widget.price * quantity,
+                                      quantity: quantity,
+                                    )));
                   },
                   child: Text(
                     'Buy Now',
@@ -196,7 +212,7 @@ class _itemDescScreenState extends State<itemDescScreen> {
                           style: textTheme.bodyLarge,
                         ),
                         Text(
-                          "Price :    ${widget.price.toString()} Rs",
+                          "Price :    ₹${widget.price.toString()}",
                           style: textTheme.bodyLarge,
                         )
                       ],

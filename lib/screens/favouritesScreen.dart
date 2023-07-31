@@ -9,7 +9,8 @@ import '../widgets/loading.dart';
 
 class favouritesScreen extends StatefulWidget {
   double price;
-  favouritesScreen({super.key, required this.price});
+  bool isAdmin;
+  favouritesScreen({super.key, required this.price, required this.isAdmin});
 
   @override
   State<favouritesScreen> createState() => _favouritesScreenState();
@@ -81,6 +82,7 @@ class _favouritesScreenState extends State<favouritesScreen> {
                           if (snapshot2.data != null) {
                             var data2 = snapshot2.data;
                             return favGrid(
+                              isAdmin: widget.isAdmin,
                               price: widget.price,
                               itemsData: ItemsData(
                                   data2['brand'],

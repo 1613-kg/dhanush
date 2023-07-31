@@ -169,7 +169,7 @@ class _cartGrid extends State<cartGrid> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: AutoSizeText(
-                        updatePrice.toString(),
+                        "₹${updatePrice.toString()}",
                         textAlign: TextAlign.center,
                       )),
                 ],

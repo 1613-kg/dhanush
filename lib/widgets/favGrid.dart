@@ -9,7 +9,12 @@ import '../services/databaseServices.dart';
 class favGrid extends StatefulWidget {
   ItemsData itemsData;
   double price;
-  favGrid({super.key, required this.itemsData, required this.price});
+  bool isAdmin;
+  favGrid(
+      {super.key,
+      required this.itemsData,
+      required this.price,
+      required this.isAdmin});
 
   @override
   State<favGrid> createState() => _favGridState();
@@ -39,6 +44,7 @@ class _favGridState extends State<favGrid> {
                 builder: (context) => itemDescScreen(
                       itemsData: widget.itemsData,
                       price: widget.price,
+                      isAdmin: widget.isAdmin,
                     )));
       },
       child: Card(

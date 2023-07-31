@@ -7,8 +7,13 @@ import 'package:flutter/material.dart';
 
 class itemsGrid extends StatefulWidget {
   ItemsData itemsData;
-  double price;
-  itemsGrid({super.key, required this.itemsData, required this.price});
+  String priceString;
+  bool isAdmin;
+  itemsGrid(
+      {super.key,
+      required this.itemsData,
+      required this.priceString,
+      required this.isAdmin});
 
   @override
   State<itemsGrid> createState() => _itemsGridState();
@@ -16,6 +21,17 @@ class itemsGrid extends StatefulWidget {
 
 class _itemsGridState extends State<itemsGrid> {
   bool isFav = false;
+  double price = 0;
+
+  double _parsePrice(String priceString) {
+    // Remove any non-numeric characters and replace commas with dots
+    String cleanedPrice =
+        priceString.replaceAll(RegExp(r'[^\d.]'), '').replaceAll(',', '.');
+
+    // Parse the string to a double
+    //print(cleanedPrice + "😂😂😂");
+    return double.parse(cleanedPrice);
+  }
 
   getFav() async {
     await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
@@ -27,11 +43,20 @@ class _itemsGridState extends State<itemsGrid> {
     });
   }
 
+  double getItemPrice(double price) {
+    double priceOfCakeToSub = price / 2.2 * (61 / 100);
+    double priceOf1kgOil = price + 500 - priceOfCakeToSub;
+    double priceOf1LOil = priceOf1kgOil / 26;
+
+    return (priceOf1LOil * widget.itemsData.quantity).roundToDouble();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getFav();
+    price = getItemPrice(_parsePrice(widget.priceString));
   }
 
   @override
@@ -44,7 +69,8 @@ class _itemsGridState extends State<itemsGrid> {
             MaterialPageRoute(
                 builder: (context) => itemDescScreen(
                       itemsData: widget.itemsData,
-                      price: widget.price,
+                      price: price,
+                      isAdmin: widget.isAdmin,
                     )));
       },
       child: Card(
@@ -76,7 +102,7 @@ class _itemsGridState extends State<itemsGrid> {
                   style: textTheme.bodyLarge,
                 ),
                 Text(
-                  "${widget.price.toString()} Rs",
+                  "₹${price.toString()}",
                   style: textTheme.bodyLarge,
                 )
               ],

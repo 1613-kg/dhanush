@@ -25,6 +25,8 @@ class homeScreen extends StatefulWidget {
 
 class _homeScreenState extends State<homeScreen> {
   bool isLoading = false;
+  bool _dataFetched = false;
+
   List<Map<String, dynamic>> _prices = [];
   UserData userData = UserData('id', 'email', 'userName', false, 'password',
       'profilePic', ['isFav'], ['isAddedToCart']);
@@ -65,6 +67,7 @@ class _homeScreenState extends State<homeScreen> {
         setState(() {
           _prices = value;
           isLoading = false;
+          _dataFetched = true;
         });
       });
     } catch (e) {
@@ -78,7 +81,7 @@ class _homeScreenState extends State<homeScreen> {
     super.initState();
     getUserData();
     getItemsData();
-    _fetchData();
+    if (!_dataFetched) _fetchData();
   }
 
   @override
@@ -98,8 +101,13 @@ class _homeScreenState extends State<homeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    (MaterialPageRoute(builder: (context) => searchScreen())));
+                Navigator.push(
+                    context,
+                    (MaterialPageRoute(
+                        builder: (context) => searchScreen(
+                              isAdmin: userData.isAdmin,
+                              priceString: _prices[1]['price'],
+                            ))));
               },
               icon: Icon(
                 Icons.search,
@@ -134,14 +142,6 @@ class _homeScreenState extends State<homeScreen> {
                       price: '${_prices[1]['price']}',
                       text: "Mustard (Sarso)",
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    priceWidgetBox(
-                      iconData: Icons.indeterminate_check_box_sharp,
-                      price: "120/L",
-                      text: "Mustard Oil",
-                    ),
                     SizedBox(height: 25),
                     Text(
                       "Items Available",
@@ -168,7 +168,8 @@ class _homeScreenState extends State<homeScreen> {
                                 itemBuilder: (context, index) {
                                   final data = dataList[index].data();
                                   return itemsGrid(
-                                    price: 250,
+                                    isAdmin: userData.isAdmin,
+                                    priceString: _prices[1]['price'],
                                     itemsData: ItemsData(
                                         data['brand'],
                                         data['description'],

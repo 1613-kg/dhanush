@@ -309,7 +309,7 @@ class DatabaseServices {
   }
 
   Future updatingItemRating(ItemsData itemsData) async {
-    await transportCollection.doc(itemsData.id).update({
+    await itemsCollection.doc(itemsData.id).update({
       "productRating": itemsData.productRating,
     });
   }

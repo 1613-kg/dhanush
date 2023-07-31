@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,11 +53,17 @@ class _orderAdminWidgetState extends State<orderAdminWidget> {
       height: 370,
       child: Card(
         child: Stack(children: [
-          Image.network(
-            itemsData.imageUrl[0],
+          CachedNetworkImage(
             fit: BoxFit.cover,
             width: double.infinity,
             height: 200,
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(
+              Icons.image,
+              size: 150,
+            ),
+            //radius: 150,
+            imageUrl: itemsData.imageUrl[0],
           ),
           Positioned(
             bottom: 120,

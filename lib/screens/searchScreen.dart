@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import '../services/databaseServices.dart';
 
 class searchScreen extends StatefulWidget {
-  searchScreen({super.key});
+  String priceString;
+  bool isAdmin;
+  searchScreen({super.key, required this.isAdmin, required this.priceString});
 
   @override
   State<searchScreen> createState() => _searchScreenState();
@@ -108,13 +110,17 @@ class _searchScreenState extends State<searchScreen> {
                     itemCount: documents.length,
                     separatorBuilder: (context, index) {
                       return Divider(
-                        thickness: 2,
-                        color: Colors.white,
+                        thickness: 1,
+                        color: Colors.white.withOpacity(0.3),
+                        indent: 20,
+                        endIndent: 20,
                       );
                     },
                     itemBuilder: (context, index) {
                       final data = documents[index];
                       return searchListView(
+                          priceString: widget.priceString,
+                          isAdmin: widget.isAdmin,
                           itemsData: ItemsData(
                               data['brand'],
                               data['description'],

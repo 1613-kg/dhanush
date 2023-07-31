@@ -19,7 +19,7 @@ class _adminFeedbackState extends State<adminFeedback> {
   getAllFeedbacks() async {
     await DatabaseServices(
       FirebaseAuth.instance.currentUser!.uid,
-    ).getAllOrders().then((snapshots) {
+    ).getAllFeedbacks().then((snapshots) {
       setState(() {
         feedback = snapshots;
       });

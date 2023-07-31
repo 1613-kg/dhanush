@@ -434,7 +434,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("Total Amount: "),
-                          AutoSizeText(widget.totalAmount.toString()),
+                          AutoSizeText("₹${widget.totalAmount.toString()}"),
                         ],
                       ),
                     ),
