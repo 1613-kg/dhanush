@@ -23,7 +23,7 @@ class _feedbackWidgetState extends State<feedbackWidget> {
   getUser() async {
     QuerySnapshot snapshot =
         await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-            .gettingUserIdData();
+            .gettingUserIdData(widget.feedbackData.givenBy);
 
     setState(() {
       userData.id = snapshot.docs[0]['uid'];

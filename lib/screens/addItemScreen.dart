@@ -290,12 +290,11 @@ class _addItemScreenState extends State<addItemScreen> {
         keyboardType: inputType,
         decoration: InputDecoration(
             hintText: hint,
-            hintStyle:
-                TextStyle(fontWeight: FontWeight.normal, color: Colors.white24),
+            hintStyle: Theme.of(context).primaryTextTheme.bodyMedium,
             //helperText: titleText,
-            // enabledBorder: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(10),
-            //     borderSide: BorderSide(color: color)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: color)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: color),

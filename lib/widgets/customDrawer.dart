@@ -4,6 +4,7 @@ import 'package:dhanush/screens/adminFeedback.dart';
 import 'package:dhanush/screens/adminServices.dart';
 import 'package:dhanush/screens/allOrders.dart';
 import 'package:dhanush/screens/facebook.dart';
+import 'package:dhanush/screens/favouritesScreen.dart';
 
 import 'package:dhanush/screens/homeScreen.dart';
 import 'package:dhanush/screens/instagram.dart';
@@ -257,7 +258,7 @@ class customDrawer extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 160,
+              height: 90,
             ),
             Align(
               alignment: Alignment.bottomCenter,

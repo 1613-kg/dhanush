@@ -45,7 +45,7 @@ class _homeScreenState extends State<homeScreen> {
   getUserData() async {
     QuerySnapshot snapshot =
         await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-            .gettingUserIdData();
+            .gettingUserIdData(FirebaseAuth.instance.currentUser!.uid);
     setState(() {
       userData.id = snapshot.docs[0]['uid'];
       userData.email = snapshot.docs[0]['email'];

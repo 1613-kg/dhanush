@@ -49,96 +49,98 @@ class _searchScreenState extends State<searchScreen> {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      searchText = value;
-                    });
-                  },
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                      hintText: "Search Item",
-                      prefixIcon: Icon(Icons.search),
-                      enabledBorder: OutlineInputBorder(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchText = value;
+                      });
+                    },
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                        hintText: "Search Item",
+                        prefixIcon: Icon(Icons.search),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(color: colorTheme)),
+                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: colorTheme)),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: colorTheme),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: colorTheme),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                        borderSide: BorderSide(color: colorTheme),
-                      ),
-                      border: InputBorder.none),
+                          borderSide: BorderSide(color: colorTheme),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: colorTheme),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide(color: colorTheme),
+                        ),
+                        border: InputBorder.none),
+                  ),
                 ),
-              ),
-              StreamBuilder(
-                stream: items,
-                builder: (ctx, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting ||
-                      !snapshot.hasData) {
-                    return loading();
-                  }
+                StreamBuilder(
+                  stream: items,
+                  builder: (ctx, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting ||
+                        !snapshot.hasData) {
+                      return loading();
+                    }
 
-                  documents = snapshot.data.docs;
+                    documents = snapshot.data.docs;
 
-                  if (searchText.length > 0) {
-                    documents = documents.where((element) {
-                      return element
-                          .get('description')
-                          .toString()
-                          .toLowerCase()
-                          .contains(searchText.toLowerCase());
-                    }).toList();
-                  }
+                    if (searchText.length > 0) {
+                      documents = documents.where((element) {
+                        return element
+                            .get('description')
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchText.toLowerCase());
+                      }).toList();
+                    }
 
-                  return ListView.separated(
-                    reverse: true,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: documents.length,
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        thickness: 1,
-                        color: Colors.white.withOpacity(0.3),
-                        indent: 20,
-                        endIndent: 20,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      final data = documents[index];
-                      return searchListView(
-                          priceString: widget.priceString,
-                          isAdmin: widget.isAdmin,
-                          itemsData: ItemsData(
-                              data['brand'],
-                              data['description'],
-                              data['itemsId'],
-                              data['quantity'],
-                              data['titleName'],
-                              data['unit'],
-                              data['imageUrl'].cast<String>(),
-                              data['isFav'].cast<String>(),
-                              data['isAddedToCart'].cast<String>(),
-                              data['webUrl'],
-                              data['productRating'],
-                              data['timeStamp'].toDate()));
-                    },
-                  );
-                },
-              ),
-            ],
+                    return ListView.separated(
+                      reverse: true,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: documents.length,
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          thickness: 1,
+                          color: colorTheme.withOpacity(0.3),
+                          indent: 20,
+                          endIndent: 20,
+                        );
+                      },
+                      itemBuilder: (context, index) {
+                        final data = documents[index];
+                        return searchListView(
+                            priceString: widget.priceString,
+                            isAdmin: widget.isAdmin,
+                            itemsData: ItemsData(
+                                data['brand'],
+                                data['description'],
+                                data['itemsId'],
+                                data['quantity'],
+                                data['titleName'],
+                                data['unit'],
+                                data['imageUrl'].cast<String>(),
+                                data['isFav'].cast<String>(),
+                                data['isAddedToCart'].cast<String>(),
+                                data['webUrl'],
+                                data['productRating'],
+                                data['timeStamp'].toDate()));
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

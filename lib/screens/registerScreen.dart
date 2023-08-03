@@ -149,6 +149,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 25,
                       ),
                       textField(
+                          hide: false,
                           color: Theme.of(context).primaryColor,
                           validate: (val) {
                             if (val!.isNotEmpty) {
@@ -167,6 +168,7 @@ class _registerScreenState extends State<registerScreen> {
                       ),
 
                       textField(
+                        hide: false,
                         color: Theme.of(context).primaryColor,
                         validate: (val) {
                           return RegExp(
@@ -185,6 +187,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       textField(
+                          hide: true,
                           color: Theme.of(context).primaryColor,
                           validate: (val) {
                             if (val!.isNotEmpty) {
@@ -202,6 +205,7 @@ class _registerScreenState extends State<registerScreen> {
                         height: 10,
                       ),
                       textField(
+                          hide: true,
                           color: Theme.of(context).primaryColor,
                           validate: (val) {
                             if (val == _passwordController.text) {
@@ -229,6 +233,7 @@ class _registerScreenState extends State<registerScreen> {
                       // adminKey
                       (dropDownValue == 'Admin')
                           ? textField(
+                              hide: true,
                               validate: (val) {
                                 if (val == adminKey) {
                                   return null;
@@ -255,13 +260,11 @@ class _registerScreenState extends State<registerScreen> {
                         height: 40,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (img != null) {
-                              await authService.uploadProPic(img).then((value) {
-                                setState(() {
-                                  profilePic = value;
-                                });
+                            await authService.uploadProPic(img).then((value) {
+                              setState(() {
+                                profilePic = value;
                               });
-                            }
+                            });
                             register();
                           },
                           child: Text(
@@ -312,10 +315,12 @@ class _registerScreenState extends State<registerScreen> {
     required TextInputAction action,
     required final validate,
     required Color color,
+    required bool hide,
   }) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: TextFormField(
+        obscureText: hide,
         validator: validate,
         cursorColor: color,
         controller: controller,

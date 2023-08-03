@@ -10,6 +10,7 @@ import '../services/databaseServices.dart';
 
 class orderWidget extends StatefulWidget {
   OrderData orderData;
+
   orderWidget({super.key, required this.orderData});
 
   @override
@@ -54,7 +55,7 @@ class _orderWidgetState extends State<orderWidget> {
             fit: BoxFit.cover,
             width: double.infinity,
             height: 200,
-            placeholder: (context, url) => CircularProgressIndicator(),
+            //placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(
               Icons.image,
               size: 150,

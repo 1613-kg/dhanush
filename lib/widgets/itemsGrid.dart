@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dhanush/constants.dart';
 import 'package:dhanush/model/itemsData.dart';
 import 'package:dhanush/screens/itemDescScreen.dart';
@@ -77,12 +78,18 @@ class _itemsGridState extends State<itemsGrid> {
         elevation: 5,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Stack(children: [
-          Image.network(
-            widget.itemsData.imageUrl[0],
+          CachedNetworkImage(
             fit: BoxFit.cover,
             width: double.infinity,
             height: 280,
-            filterQuality: FilterQuality.high,
+
+            //placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(
+              Icons.image,
+              size: 150,
+            ),
+            //radius: 150,
+            imageUrl: widget.itemsData.imageUrl[0],
           ),
           Positioned(
             bottom: 10,
@@ -119,18 +126,21 @@ class _itemsGridState extends State<itemsGrid> {
                       )
                     : Icon(Icons.favorite_border_outlined),
                 onPressed: () async {
-                  await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-                      .toggleFav(widget.itemsData.id)
-                      .then((value) {
-                    setState(() {
-                      isFav = !isFav;
-                    });
-                    (isFav)
-                        ? showSnackbar(
-                            context, Colors.green, "Item added to favourites")
-                        : showSnackbar(context, Colors.red,
-                            "Item removed from favourites");
-                  });
+                  (widget.isAdmin)
+                      ? showSnackbar(context, Colors.red, "Admin can't access")
+                      : await DatabaseServices(
+                              FirebaseAuth.instance.currentUser!.uid)
+                          .toggleFav(widget.itemsData.id)
+                          .then((value) {
+                          setState(() {
+                            isFav = !isFav;
+                          });
+                          (isFav)
+                              ? showSnackbar(context, Colors.green,
+                                  "Item added to favourites")
+                              : showSnackbar(context, Colors.red,
+                                  "Item removed from favourites");
+                        });
                 },
               )),
         ]),

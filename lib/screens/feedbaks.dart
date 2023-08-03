@@ -54,68 +54,65 @@ class _feedbacksState extends State<feedbacks> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        child: Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: widht / 2,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: LinearBorder(), backgroundColor: colorTheme),
-                  onPressed: () async {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => homeScreen()),
-                        (route) => false);
-                  },
-                  child: Text(
-                    "Later",
-                    style: TextStyle(color: Colors.white),
-                  ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: widht / 2,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: LinearBorder(), backgroundColor: colorTheme),
+                onPressed: () async {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => homeScreen()),
+                      (route) => false);
+                },
+                child: Text(
+                  "Later",
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(
-                width: widht / 2,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: LinearBorder(), backgroundColor: colorTheme),
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
+            ),
+            SizedBox(
+              width: widht / 2,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: LinearBorder(), backgroundColor: colorTheme),
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await DatabaseServices(
+                            FirebaseAuth.instance.currentUser!.uid)
+                        .savingFeedbackData(FeedbackData(
+                            feedbackId: '',
+                            content: _feedbackController.text,
+                            givenBy: '',
+                            submitDate: DateTime.now()))
+                        .whenComplete(() {
                       setState(() {
-                        isLoading = true;
+                        isLoading = false;
                       });
-                      await DatabaseServices(
-                              FirebaseAuth.instance.currentUser!.uid)
-                          .savingFeedbackData(FeedbackData(
-                              feedbackId: '',
-                              content: _feedbackController.text,
-                              givenBy: '',
-                              submitDate: DateTime.now()))
-                          .whenComplete(() {
-                        setState(() {
-                          isLoading = false;
-                        });
-                        showSnackbar(context, Colors.green,
-                            "Feedback submitted successfully");
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => homeScreen()),
-                            (route) => false);
-                      });
-                    }
-                  },
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                      showSnackbar(context, Colors.green,
+                          "Feedback submitted successfully");
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => homeScreen()),
+                          (route) => false);
+                    });
+                  }
+                },
+                child: Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       body: (isLoading)

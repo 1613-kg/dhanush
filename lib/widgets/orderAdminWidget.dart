@@ -7,13 +7,12 @@ import 'package:intl/intl.dart';
 
 import '../model/itemsData.dart';
 import '../model/orderData.dart';
+import '../model/userData.dart';
 import '../services/databaseServices.dart';
 
 class orderAdminWidget extends StatefulWidget {
   OrderData orderData;
-  String userName;
-  orderAdminWidget(
-      {super.key, required this.orderData, required this.userName});
+  orderAdminWidget({super.key, required this.orderData});
 
   @override
   State<orderAdminWidget> createState() => _orderAdminWidgetState();
@@ -22,6 +21,8 @@ class orderAdminWidget extends StatefulWidget {
 class _orderAdminWidgetState extends State<orderAdminWidget> {
   ItemsData itemsData = ItemsData("brand", "description", "id", 0, "titleName",
       "unit", ["imageUrl"], [""], [], "", 0, DateTime.now());
+  UserData userData = UserData('id', 'email', 'userName', false, 'password',
+      'profilePic', ['isFav'], ['isAddedToCart']);
 
   getItemsData(String itemId) async {
     QuerySnapshot snapshot =
@@ -35,11 +36,29 @@ class _orderAdminWidgetState extends State<orderAdminWidget> {
     });
   }
 
+  getUser() async {
+    QuerySnapshot snapshot =
+        await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
+            .gettingUserIdData(widget.orderData.buyerId);
+
+    setState(() {
+      userData.id = snapshot.docs[0]['uid'];
+      userData.email = snapshot.docs[0]['email'];
+      userData.userName = snapshot.docs[0]['userName'];
+      userData.isAdmin = snapshot.docs[0]['isAdmin'];
+      userData.isAddedToCart = snapshot.docs[0]['isAddedToCart'].cast<String>();
+      userData.isFav = snapshot.docs[0]['isFav'].cast<String>();
+      userData.profilePic = snapshot.docs[0]['profilePic'];
+      userData.password = snapshot.docs[0]['password'];
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getItemsData(widget.orderData.itemId);
+    getUser();
   }
 
   @override
@@ -57,7 +76,7 @@ class _orderAdminWidgetState extends State<orderAdminWidget> {
             fit: BoxFit.cover,
             width: double.infinity,
             height: 200,
-            placeholder: (context, url) => CircularProgressIndicator(),
+            //placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(
               Icons.image,
               size: 150,
@@ -101,7 +120,7 @@ class _orderAdminWidgetState extends State<orderAdminWidget> {
             bottom: 60,
             left: 10,
             child: Text(
-              "Buyer: ${widget.userName}",
+              "Buyer: ${userData.userName}",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
             ),
           ),

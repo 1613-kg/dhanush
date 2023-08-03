@@ -35,7 +35,7 @@ class _allOrdersState extends State<allOrders> {
   getUser() async {
     QuerySnapshot snapshot =
         await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-            .gettingUserIdData();
+            .gettingUserIdData(FirebaseAuth.instance.currentUser!.uid);
 
     setState(() {
       userData.id = snapshot.docs[0]['uid'];
@@ -90,16 +90,16 @@ class _allOrdersState extends State<allOrders> {
                     itemBuilder: ((context, index) {
                       final data = dataList[index].data();
                       return orderAdminWidget(
-                          orderData: OrderData(
-                              orderId: data['orderId'],
-                              address: data['address'],
-                              itemId: data['itemId'],
-                              buyerId: data['buyerId'],
-                              date: data['date'].toDate(),
-                              paymentType: data['paymentType'],
-                              price: data['price'],
-                              quantity: data['quantity']),
-                          userName: userData.userName);
+                        orderData: OrderData(
+                            orderId: data['orderId'],
+                            address: data['address'],
+                            itemId: data['itemId'],
+                            buyerId: data['buyerId'],
+                            date: data['date'].toDate(),
+                            paymentType: data['paymentType'],
+                            price: data['price'],
+                            quantity: data['quantity']),
+                      );
                     }));
               } else
                 return Container();

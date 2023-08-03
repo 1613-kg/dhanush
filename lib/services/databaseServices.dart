@@ -61,9 +61,9 @@ class DatabaseServices {
     return snapshot;
   }
 
-  Future gettingUserIdData() async {
+  Future gettingUserIdData(String userID) async {
     QuerySnapshot snapshot =
-        await userCollection.where("uid", isEqualTo: uid).get();
+        await userCollection.where("uid", isEqualTo: userID).get();
     return snapshot;
   }
 

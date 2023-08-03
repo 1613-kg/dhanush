@@ -61,7 +61,7 @@ class _searchListViewState extends State<searchListView> {
       contentPadding: EdgeInsets.all(25),
       leading: CachedNetworkImage(
         fit: BoxFit.cover,
-        placeholder: (context, url) => CircularProgressIndicator(),
+        // placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Icon(
           Icons.image,
           size: 20,

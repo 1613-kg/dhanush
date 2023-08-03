@@ -30,7 +30,7 @@ class _imageSlider extends State<imageSlider> {
           child: CachedNetworkImage(
             width: double.infinity,
             fit: BoxFit.cover,
-            placeholder: (context, url) => CircularProgressIndicator(),
+            // placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(
               Icons.image,
               size: 150,

@@ -95,6 +95,7 @@ class AuthService {
   }
 
   Future<String> uploadProPic(File? image) async {
+    if (image == null) return "";
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('profilePics')

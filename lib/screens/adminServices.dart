@@ -85,7 +85,7 @@ class _adminServicesState extends State<adminServices> {
                   height: height / 4,
                   width: widht / 1.5,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => CircularProgressIndicator(),
+                  //placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => CircleAvatar(
                         child: Icon(
                           Icons.person,

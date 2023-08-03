@@ -64,7 +64,7 @@ class _itemDescScreenState extends State<itemDescScreen> {
     var textTheme = Theme.of(context).primaryTextTheme;
     var colorTheme = Theme.of(context).primaryColor;
     final data = widget.itemsData;
-    bool isLoading = false;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -80,6 +80,7 @@ class _itemDescScreenState extends State<itemDescScreen> {
           style: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
               onPressed: () {
@@ -118,66 +119,62 @@ class _itemDescScreenState extends State<itemDescScreen> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        child: Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: widht / 2,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: LinearBorder(), backgroundColor: colorTheme),
-                  onPressed: () async {
-                    (widget.isAdmin)
-                        ? showSnackbar(
-                            context, Colors.red, "Admin can't access")
-                        : await DatabaseServices(
-                                FirebaseAuth.instance.currentUser!.uid)
-                            .toggleIsAddedToCart(widget.itemsData.id)
-                            .then((value) {
-                            setState(() {
-                              isAddedToCart = !isAddedToCart;
-                            });
-                            (isAddedToCart)
-                                ? showSnackbar(
-                                    context, Colors.green, "Item added to cart")
-                                : showSnackbar(context, Colors.red,
-                                    "Item removed from cart");
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: widht / 2,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: LinearBorder(), backgroundColor: colorTheme),
+                onPressed: () async {
+                  (widget.isAdmin)
+                      ? showSnackbar(context, Colors.red, "Admin can't access")
+                      : await DatabaseServices(
+                              FirebaseAuth.instance.currentUser!.uid)
+                          .toggleIsAddedToCart(widget.itemsData.id)
+                          .then((value) {
+                          setState(() {
+                            isAddedToCart = !isAddedToCart;
                           });
-                  },
-                  child: Text(
-                      (isAddedToCart) ? "Remove from cart" : "Add To Cart",
-                      style: TextStyle(color: Colors.white)),
+                          (isAddedToCart)
+                              ? showSnackbar(
+                                  context, Colors.green, "Item added to cart")
+                              : showSnackbar(context, Colors.red,
+                                  "Item removed from cart");
+                        });
+                },
+                child: Text(
+                    (isAddedToCart) ? "Remove from cart" : "Add To Cart",
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            SizedBox(
+              width: widht / 2,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: LinearBorder(), backgroundColor: colorTheme),
+                onPressed: () {
+                  (widget.isAdmin)
+                      ? showSnackbar(context, Colors.red, "Admin can't access")
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => buyNowScreen(
+                                    itemsData: widget.itemsData,
+                                    totalAmount: widget.price * quantity,
+                                    quantity: quantity,
+                                  )));
+                },
+                child: Text(
+                  'Buy Now',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(
-                width: widht / 2,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: LinearBorder(), backgroundColor: colorTheme),
-                  onPressed: () {
-                    (widget.isAdmin)
-                        ? showSnackbar(
-                            context, Colors.red, "Admin can't access")
-                        : Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => buyNowScreen(
-                                      itemsData: widget.itemsData,
-                                      totalAmount: widget.price * quantity,
-                                      quantity: quantity,
-                                    )));
-                  },
-                  child: Text(
-                    'Buy Now',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(

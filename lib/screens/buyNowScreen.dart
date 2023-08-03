@@ -41,8 +41,8 @@ class _buyNowScreenState extends State<buyNowScreen> {
   String order_Id = "";
 
   void _handlerPaymentSuccess(PaymentSuccessResponse response) {
-    // _addOrderData();
-    print("Pament success😂😂😂");
+    _addOrderData();
+    // print("Pament success😂😂😂");
     //Toast.show("Pament success", context);
   }
 
@@ -57,7 +57,7 @@ class _buyNowScreenState extends State<buyNowScreen> {
   getUser() async {
     QuerySnapshot snapshot =
         await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-            .gettingUserIdData();
+            .gettingUserIdData(FirebaseAuth.instance.currentUser!.uid);
 
     setState(() {
       email = snapshot.docs[0]['email'];

@@ -34,15 +34,15 @@ class _userOrderState extends State<userOrder> {
   getUser() async {
     QuerySnapshot snapshot =
         await DatabaseServices(FirebaseAuth.instance.currentUser!.uid)
-            .gettingUserIdData();
+            .gettingUserIdData(FirebaseAuth.instance.currentUser!.uid);
 
     setState(() {
       userData.id = snapshot.docs[0]['uid'];
       userData.email = snapshot.docs[0]['email'];
       userData.userName = snapshot.docs[0]['userName'];
       userData.isAdmin = snapshot.docs[0]['isAdmin'];
-      userData.isAddedToCart = snapshot.docs[0]['isAddedToCart'];
-      userData.isFav = snapshot.docs[0]['isFav'];
+      userData.isAddedToCart = snapshot.docs[0]['isAddedToCart'].cast<String>();
+      userData.isFav = snapshot.docs[0]['isFav'].cast<String>();
       userData.profilePic = snapshot.docs[0]['profilePic'];
       userData.password = snapshot.docs[0]['password'];
     });
