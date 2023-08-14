@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/orderData.dart';
 import 'package:dhanush/widgets/customDrawer.dart';
+import 'package:dhanush/widgets/empty.dart';
 import 'package:dhanush/widgets/orderWidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _userOrderState extends State<userOrder> {
     // TODO: implement initState
     super.initState();
     getOrderData();
+    getUser();
   }
 
   @override
@@ -104,7 +106,7 @@ class _userOrderState extends State<userOrder> {
                     }),
                     itemCount: dataList.length);
               } else
-                return Container();
+                return empty();
             } else
               return Container();
           } else

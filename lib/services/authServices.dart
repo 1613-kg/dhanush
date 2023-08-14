@@ -27,7 +27,7 @@ class AuthService {
 
   // register
   Future registerUserWithEmailandPassword(String fullName, String email,
-      String password, bool isAdmin, String profilePic) async {
+      String password, bool isAdmin, File? img) async {
     try {
       User user = (await firebaseAuth.createUserWithEmailAndPassword(
               email: email, password: password))
@@ -35,6 +35,7 @@ class AuthService {
 
       if (user != null) {
         // call our database service to update the user data.
+        String profilePic = await uploadProPic(img);
         await DatabaseServices(user.uid)
             .savingUserData(fullName, email, isAdmin, profilePic, password);
         return true;

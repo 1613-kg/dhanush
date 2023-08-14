@@ -257,9 +257,13 @@ class customDrawer extends StatelessWidget {
                 style: textTheme.bodyLarge,
               ),
             ),
-            SizedBox(
-              height: 90,
-            ),
+            (userData.isAdmin)
+                ? SizedBox(
+                    height: 90,
+                  )
+                : SizedBox(
+                    height: 150,
+                  ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(

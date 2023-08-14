@@ -40,13 +40,14 @@ class _registerScreenState extends State<registerScreen> {
       setState(() {
         _isLoading = true;
       });
+
       await authService
           .registerUserWithEmailandPassword(
               _userNameController.text,
               _emailController.text,
               _passwordController.text,
               (dropDownValue == 'Admin') ? true : false,
-              profilePic)
+              img)
           .then((value) async {
         if (value == true) {
           // saving the shared preference state
@@ -190,10 +191,10 @@ class _registerScreenState extends State<registerScreen> {
                           hide: true,
                           color: Theme.of(context).primaryColor,
                           validate: (val) {
-                            if (val!.isNotEmpty) {
-                              return null;
+                            if (val!.length < 6) {
+                              return "Password must be at least 6 characters";
                             } else {
-                              return "Feild cannot be empty";
+                              return null;
                             }
                           },
                           hintText: "Password",
@@ -259,12 +260,7 @@ class _registerScreenState extends State<registerScreen> {
                         width: double.infinity,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () async {
-                            await authService.uploadProPic(img).then((value) {
-                              setState(() {
-                                profilePic = value;
-                              });
-                            });
+                          onPressed: () {
                             register();
                           },
                           child: Text(

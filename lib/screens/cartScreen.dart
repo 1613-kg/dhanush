@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dhanush/model/itemsData.dart';
+import 'package:dhanush/widgets/empty.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -102,15 +103,15 @@ class _cartScreenState extends State<cartScreen> {
                               price: widget.price,
                             );
                           } else
-                            return Container();
+                            return empty();
                         } else
-                          return Container();
+                          return empty();
                       }),
                     );
                   },
                 );
               } else
-                return Container();
+                return empty();
             } else
               return Container();
           } else
